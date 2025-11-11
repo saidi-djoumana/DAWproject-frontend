@@ -4,6 +4,9 @@
     <div class="gradient top-left"></div>
     <div class="gradient bottom-right"></div>
     <!-- Page content goes here -->
+    <div class="auth-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -14,13 +17,23 @@ import NavbarAuth from '@/components/NavbarAuth.vue';
 <style scoped>
 .auth-page {
   position: relative;
+  display: flex;           
+  flex-direction: column;  
   min-height: 100vh;
   background-color: rgb(242, 242, 242);
   overflow: hidden;
 }
 
+.auth-content {
+  flex:1;
+  display: flex;
+  justify-content: center;  /* center horizontally */
+  align-items: center;      /* center vertically */
+  z-index: 1;               /* above gradients */
+}
+
 .gradient {
-  position: absolute;
+  position: fixed;
   width: 60%;
   height: 60%;
   z-index: 0;

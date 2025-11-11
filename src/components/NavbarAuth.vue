@@ -33,7 +33,7 @@
 }
 
 .logo {
-  height: 100%;
+  height: 70%;
   object-fit: contain;
 }
 
