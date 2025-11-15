@@ -54,14 +54,14 @@ const showPassword = ref(false)
 
 .login-box {
   width: clamp(300px, 40vw, 532px);
-  height: clamp(350px, 50vh, 464px);
   background: white;
   border-radius: 1.875rem; /* 30px */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 2.5rem;
+  padding: 1rem 2.5rem;
+  margin: 0 auto;
   
 }
 .login-form{
@@ -208,4 +208,102 @@ input[type="password"]:focus {
   text-decoration: none;
   color: rgba(0, 158, 158, 1);
 }
+
+
+
+
+/* ======== Responsive ======== */
+
+/* Tablet screens (below 1024px) */
+@media (max-width: 1023px) {
+  .login-box {
+    width: 60vw;
+    height: auto;
+    padding: 2rem;
+  }
+
+  .login-title {
+    text-align: center;
+  }
+
+  .login-subtitle {
+    text-align: center;
+  }
+ 
+}
+
+/* Mobile screens (below 768px) */
+@media (max-width: 768px) {
+  .login-box {
+    width: 85%;
+    padding: 1.5rem;
+    align-items: center;
+  }
+
+  .login-form {
+    width: 100%;
+  }
+
+  .input-group {
+    margin-bottom: 1rem;
+  }
+
+  .forgot-password {
+    position: static;
+    text-align: right;
+    margin-top: -0.5rem;
+    display: block;
+  }
+
+  .toggle-password {
+    right: 0.75rem;
+    top: 45%;
+    transform: translateY(70%);
+  }
+
+  .login-btn {
+    height: 38px;
+    font-size: 0.875rem;
+  }
+
+  .register-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small mobile (below 480px) */
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .login-title {
+    font-size: 1.25rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.85rem;
+  }
+
+  input[type="email"],
+  input[type="password"] {
+    font-size: 0.8rem;
+  }
+
+  .forgot-password {
+    font-size: 0.75rem;
+  }
+
+  .login-btn {
+    height: 36px;
+    font-size: 0.8rem;
+  }
+
+  .register-text {
+    font-size: 0.8rem;
+  }
+}
+
 </style>

@@ -85,7 +85,7 @@ const showPassword2 = ref(false)
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 2.5rem;
+  padding:2.5rem;
 }
 
 .login-form {
@@ -212,6 +212,100 @@ select:focus {
     0px 2px 2px 0px rgba(0, 0, 0, 0.15),
     0px -5px 0px 0px rgba(0, 0, 0, 0.15) inset,
     0px 4px 0px 0px rgba(255, 255, 255, 0.2) inset;
+}
+
+
+/* ======== Responsive ======== */
+
+/* Tablet screens (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .login-box {
+    width: 60vw;
+    padding: 2rem;
+  }
+
+  .login-title,
+  .login-subtitle {
+    text-align: center;
+  }
+
+  .input-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .toggle-password {
+    right: 0.75rem;
+    top: 45%;
+  }
+
+  select {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .login-box {
+    width: 85%;
+    padding: 1.5rem;
+    align-items: center;
+  }
+
+  .login-form {
+    width: 100%;
+  }
+
+  .input-group {
+    margin-bottom: 1rem;
+  }
+
+  .toggle-password {
+    right: 0.5rem;
+    top: 45%;
+     transform: translateY(70%);
+  }
+
+  .login-btn {
+    height: 38px;
+    font-size: 0.875rem;
+  }
+
+  select {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small mobile screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .login-title {
+    font-size: 1.25rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.85rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  select {
+    font-size: 0.8rem;
+  }
+
+  .toggle-password {
+    font-size: 0.9rem;
+  }
+
+  .login-btn {
+    height: 36px;
+    font-size: 0.8rem;
+  }
 }
 
 

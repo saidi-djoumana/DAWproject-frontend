@@ -19,18 +19,25 @@ import NavbarAuth from '@/components/NavbarAuth.vue';
   position: relative;
   display: flex;           
   flex-direction: column;  
-  min-height: 100vh;
+  height: 100vh;
   background-color: rgb(242, 242, 242);
   overflow: hidden;
 }
 
 .auth-content {
-  flex:1;
+  flex: 1;
   display: flex;
-  justify-content: center;  /* center horizontally */
-  align-items: center;      /* center vertically */
-  z-index: 1;               /* above gradients */
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem; /* small horizontal padding for mobile */
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
+
+
+
 
 .gradient {
   position: fixed;
@@ -63,4 +70,41 @@ import NavbarAuth from '@/components/NavbarAuth.vue';
     rgba(255, 255, 255, 0) 75%
   );
 }
+
+
+
+/* ======== Responsive ======== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .gradient {
+    width: 80%;
+    height: 80%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .auth-content {
+    padding: 2rem 1rem;
+  }
+
+  .gradient {
+    width: 100%;
+    height: 100%;
+    opacity: 0.4; /* softer background on small screens */
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .auth-content {
+    padding: 1rem;
+  }
+
+  .gradient {
+    display: none; /* hide gradients for better performance and clarity */
+  }
+}
+
 </style>

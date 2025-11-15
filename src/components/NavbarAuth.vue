@@ -39,5 +39,48 @@
 
 
 
+/* ======== Responsive ======== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .logo {
+    height: 60%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .navbar {
+    height: clamp(3.5rem, 6vw, 4rem);
+    justify-content: center;
+  }
+
+  .container {
+    padding: 0 20px;
+    justify-content: center;
+  }
+
+  .logo {
+    height: 50%;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .logo {
+    height: 40%;
+  }
+}
+
+
+
 
 </style>
