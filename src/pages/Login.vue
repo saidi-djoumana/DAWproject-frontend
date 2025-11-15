@@ -5,16 +5,17 @@
         <p class="login-subtitle">Sign in with your existing CuraLink account.</p>
 
       <!-- Form -->
-        <form class="login-form">
+        <form class="login-form" @submit.prevent="login">
             <div class="input-group">
                 <label for="email" class="input-label">email</label>
-                <input type="email" id="email" required />
+                <input v-model="email" type="email" id="email" required />
             </div>
 
             <div class="input-group password-group">
                 <label for="password" class="input-label">Password</label>
                 <router-link to="#" class="forgot-password">Forget password?</router-link>
                 <input
+                    v-model="password"
                     :type="showPassword ? 'text' : 'password'"
                     id="password"
                     required
@@ -28,6 +29,7 @@
 
 
             <button type="submit" class="login-btn">Log in</button>
+            <p v-if="errorMessage">{{ errorMessage }}</p>
             
         </form>
 
@@ -45,9 +47,36 @@
 
 <script setup>
 import { ref } from 'vue'
+import api from '@/api/axios.js';
+  const showPassword = ref(false)
+  const email = ref('');
+  const password = ref('');
+  const errorMessage = ref('');
 
-const showPassword = ref(false)
+  const login = async () => {
+    try {
+      const response = await api.post('/login', {
+        email: email.value,
+        password: password.value
+      });
+      console.log(response.data);
+      const token = response.data.data.token;  // <- note the .data.token
+      localStorage.setItem('authToken', token);
+      window.location.href = '/dashboard'; 
+    } catch (error) {
+      console.error('Login failed:', error);
+      errorMessage.value = error.response?.data?.message || 'An error occurred during login.';
+    }
+  }
+
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    window.location.href = '/auth/login'; 
+  }
+
+
 </script>
+
 
 
 <style scoped>

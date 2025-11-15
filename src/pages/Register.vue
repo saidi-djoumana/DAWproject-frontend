@@ -1,79 +1,123 @@
 <template>
-    <div class="login-box">
-      <!-- Heading -->
-        <h5 class="login-title">Sign up</h5>
-        <p class="login-subtitle">Create your CuraLink account.</p>
+  <div class="login-box">
+    <!-- Heading -->
+    <h5 class="login-title">Sign up</h5>
+    <p class="login-subtitle">Create your CuraLink account.</p>
 
-      <!-- Form -->
-        <form class="login-form">
-            <div class="input-group">
-                <label for="name" class="input-label">Full Name</label>
-                <input type="text" id="name" required />
-            </div>
+    <!-- Form -->
+    <form class="login-form" @submit.prevent="register">
 
-            <div class="input-group">
-                <label for="email" class="input-label">Email</label>
-                <input type="email" id="email" required />
-            </div>
+      <!-- Name -->
+      <div class="input-group">
+        <label for="name" class="input-label">Full Name</label>
+        <input v-model="name" type="text" id="name" required />
+      </div>
 
-            <div class="input-group">
-                <label for="role" class="input-label">Which best describes your role?</label>
-                <select id="role" required>
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="event-organizer">Event Organizer</option>
-                    <option value="communicator">Communicator</option>
-                    <option value="scientific-committee">Member of the Scientific Committee</option>
-                    <option value="participant">Participant</option>
-                    <option value="guest-speaker">Guest / Speaker</option>
-                    <option value="workshop-facilitator">Workshop Facilitator</option>
-                </select>
-            </div>
+      <!-- Email -->
+      <div class="input-group">
+        <label for="email" class="input-label">Email</label>
+        <input v-model="email" type="email" id="email" required />
+      </div>
 
+      <!-- Role -->
+      <div class="input-group">
+        <label for="role" class="input-label">Which best describes your role?</label>
+        <select v-model="role" id="role" required>
+          <option value="" disabled>Select your role</option>
+          <option value="event-organizer">Event Organizer</option>
+          <option value="communicator">Communicator</option>
+          <option value="scientific-committee">Member of the Scientific Committee</option>
+          <option value="participant">Participant</option>
+          <option value="guest-speaker">Guest / Speaker</option>
+          <option value="workshop-facilitator">Workshop Facilitator</option>
+        </select>
+      </div>
 
-            <div class="input-group password-group">
-                <label for="password" class="input-label">Password</label>
-                <input
-                    :type="showPassword1 ? 'text' : 'password'"
-                    id="password"
-                    required
-                />
-                
-                <i
-                    class="fa-regular fa-eye toggle-password"
-                    @click="showPassword1 = !showPassword1"
-                ></i>
-            </div>
+      <!-- Password -->
+      <div class="input-group password-group">
+        <label for="password" class="input-label">Password</label>
+        <input
+          v-model="password"
+          :type="showPassword1 ? 'text' : 'password'"
+          id="password"
+          required
+        />
+        <i
+          class="fa-regular fa-eye toggle-password"
+          @click="showPassword1 = !showPassword1"
+        ></i>
+      </div>
 
-            <div class="input-group password-group">
-                <label for="confirmPassword" class="input-label">Confirm Password</label>
-                <input
-                    :type="showPassword2 ? 'text' : 'password'"
-                    id="confirmPassword"
-                    required
-                />
-        
-                <i
-                    class="fa-regular fa-eye toggle-password"
-                    @click="showPassword2 = !showPassword2"
-                ></i>
-            </div>
+      <!-- Confirm Password -->
+      <div class="input-group password-group">
+        <label for="confirmPassword" class="input-label">Confirm Password</label>
+        <input
+          v-model="confirmPassword"
+          :type="showPassword2 ? 'text' : 'password'"
+          id="confirmPassword"
+          required
+        />
+        <i
+          class="fa-regular fa-eye toggle-password"
+          @click="showPassword2 = !showPassword2"
+        ></i>
+      </div>
 
+      <!-- Error message -->
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
 
+      <!-- Submit button -->
+      <button type="submit" class="login-btn">Sign up</button>
 
-
-            <button type="submit" class="login-btn">Sign up</button>
-            
-        </form>
-
-    </div>
+    </form>
+  </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import api from '@/api/axios.js'  // your Axios instance
 
+// reactive variables
+const name = ref('')
+const email = ref('')
+const role = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 const showPassword1 = ref(false)
 const showPassword2 = ref(false)
+const errorMessage = ref('')
+
+// register function
+const register = async () => {
+  // simple client-side validation
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = "Passwords do not match."
+    return
+  }
+
+  try {
+    const response = await api.post('/register', {
+      name: name.value,
+      email: email.value,
+      role: role.value,
+      password: password.value,
+      password_confirmation: confirmPassword.value
+    })
+
+    console.log('Register success:', response.data)
+    // store token and redirect
+    const token = response.data.token
+    localStorage.setItem('authToken', token)
+    window.location.href = '/dashboard'
+
+  } catch (error) {
+    console.error('Register failed:', error)
+    errorMessage.value = error.response?.data?.message || 'An error occurred during registration.'
+  }
+}
 </script>
+
+
 
 <style scoped>
 .login-box {
