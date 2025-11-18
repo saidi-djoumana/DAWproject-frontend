@@ -24,12 +24,13 @@
         <label for="role" class="input-label">Which best describes your role?</label>
         <select v-model="role" id="role" required>
           <option value="" disabled>Select your role</option>
-          <option value="event-organizer">Event Organizer</option>
-          <option value="communicator">Communicator</option>
-          <option value="scientific-committee">Member of the Scientific Committee</option>
+          <option value="event_organizer">Event Organizer</option>
+          <option value="author">Communicator</option>
+          <option value="scientific_committee">Member of the Scientific Committee</option>
           <option value="participant">Participant</option>
-          <option value="guest-speaker">Guest / Speaker</option>
-          <option value="workshop-facilitator">Workshop Facilitator</option>
+          <option value="guest_speaker">Guest / Speaker</option>
+          <option value="workshop_facilitator">Workshop Facilitator</option>
+
         </select>
       </div>
 
@@ -75,9 +76,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import api from '@/api/axios.js'  // your Axios instance
+import api from '@/api/axios.js'
 
-// reactive variables
 const name = ref('')
 const email = ref('')
 const role = ref('')
@@ -87,9 +87,7 @@ const showPassword1 = ref(false)
 const showPassword2 = ref(false)
 const errorMessage = ref('')
 
-// register function
 const register = async () => {
-  // simple client-side validation
   if (password.value !== confirmPassword.value) {
     errorMessage.value = "Passwords do not match."
     return
@@ -102,20 +100,26 @@ const register = async () => {
       role: role.value,
       password: password.value,
       password_confirmation: confirmPassword.value
-    })
+    });
 
-    console.log('Register success:', response.data)
-    // store token and redirect
-    const token = response.data.token
-    localStorage.setItem('authToken', token)
-    window.location.href = '/dashboard'
+    // Get token and user info
+    const token = response.data.token;
+    const user = response.data.user;
+
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('authUser', JSON.stringify(user));
+
+    // Redirect to dashboard
+    window.location.href = '/dashboard';
 
   } catch (error) {
-    console.error('Register failed:', error)
-    errorMessage.value = error.response?.data?.message || 'An error occurred during registration.'
+    console.error('Register failed:', error);
+    errorMessage.value = error.response?.data?.message || 'An error occurred during registration.';
   }
 }
+
 </script>
+
 
 
 

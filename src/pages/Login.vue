@@ -47,35 +47,41 @@
 
 <script setup>
 import { ref } from 'vue'
-import api from '@/api/axios.js';
-  const showPassword = ref(false)
-  const email = ref('');
-  const password = ref('');
-  const errorMessage = ref('');
+import api from '@/api/axios.js'
 
-  const login = async () => {
-    try {
-      const response = await api.post('/login', {
-        email: email.value,
-        password: password.value
-      });
-      console.log(response.data);
-      const token = response.data.data.token;  // <- note the .data.token
-      localStorage.setItem('authToken', token);
-      window.location.href = '/dashboard'; 
-    } catch (error) {
-      console.error('Login failed:', error);
-      errorMessage.value = error.response?.data?.message || 'An error occurred during login.';
-    }
+const showPassword = ref(false)
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
+
+const login = async () => {
+  try {
+    const response = await api.post('/login', {
+      email: email.value,
+      password: password.value
+    });
+
+    // Get token and user info consistently
+    const token = response.data.token;
+    const user = response.data.user;
+
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('authUser', JSON.stringify(user));
+
+    window.location.href = '/dashboard';
+  } catch (error) {
+    console.error('Login failed:', error);
+    errorMessage.value = error.response?.data?.message || 'An error occurred during login.';
   }
+}
 
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    window.location.href = '/auth/login'; 
-  }
-
-
+const logout = () => {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('authUser');
+  window.location.href = '/auth/login';
+}
 </script>
+
 
 
 
