@@ -38,6 +38,8 @@
   padding: 80px 40px;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;   /* ensure padding doesn't cause overflow */
+  overflow-x: hidden;       /* prevent horizontal scroll from translated images */
 }
 
 .hero-container {
@@ -123,6 +125,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .image-stack {
@@ -221,67 +224,117 @@
 
 /* ===== MOBILE BREAKPOINT (480px) ===== */
 @media (max-width: 480px) {
+  /* container and text */
   .hero {
-    padding: 0px;
+    padding: 16px 12px 32px; /* added extra bottom padding so content has breathing room */
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .hero-container {
     flex-direction: column;
-    align-items: center; /* center everything horizontally */
-    gap: 1.5rem;
+    align-items: flex-start; /* stack content and align to left */
+    gap: 1rem;
+    width: 100%;
   }
 
   .hero-left {
     width: 100%;
-    max-width: 320px;  /* limit width to prevent overflow */
-    text-align: center;
+    max-width: 420px;        /* allow a bit more width for left-aligned text */
+    text-align: left;        /* left-align stacked text */
+    padding: 8px 12px;
+    box-sizing: border-box;
   }
 
   .hero-left h1 {
-    font-size: clamp(1.4rem, 7vw, 1.8rem);
+    font-size: clamp(1.3rem, 7vw, 1.8rem);
   }
 
   .hero-left p {
-    font-size: clamp(0.75rem, 3vw, 0.9rem);
+    font-size: clamp(0.75rem, 3vw, 0.95rem);
   }
 
-.hero-buttons {
-  flex-direction: column;      /* stack buttons vertically */
-  width: 100%;
-  gap: 0.5rem;
-  justify-content: center;     /* vertical spacing in column layout */
-  align-items: center;         /* center buttons horizontally */
-}
-
+  /* keep buttons side-by-side on mobile */
+  .hero-buttons {
+    display: flex;
+    flex-direction: row;       /* side-by-side */
+    gap: 0.5rem;
+    width: auto;
+    justify-content: flex-start; /* left aligned under the text */
+    align-items: center;
+    padding: 0 8px;
+    flex-wrap: wrap;           /* allow wrap if space is very tight */
+  }
 
   .btn-create, .btn-explore {
-    width: 100%;
-    max-width: 180px;
+    width: auto;               /* don't force full width */
+    min-width: 120px;         /* give buttons a reasonable tappable size */
+    padding: 10px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
+  /* stacked, overlapping images but contained */
   .hero-right {
     width: 100%;
     display: flex;
-    justify-content: center;     /* center images */
-    overflow: hidden;            /* prevent horizontal overflow */
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    box-sizing: border-box;
+    overflow: hidden; /* keep overlaps from causing horizontal scroll */
   }
 
   .image-stack {
-    max-width: 240px;            /* restrict image stack width */
+    position: relative;      /* allow absolute children to overlap */
     width: 100%;
-    position: relative;
+    max-width: 280px;        /* fits narrow screens */
+    height: 220px;           /* container height to hold the stack */
+    margin: 0 auto 8px;      /* small bottom gap */
+    box-sizing: border-box;
   }
 
+  .hero-img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110%;             /* slightly wider for visual overlap */
+    max-width: 320px;
+    height: auto;
+    max-height: 220px;
+    border-radius: 14px;
+    object-fit: cover;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  /* top image sits above and slightly up/left */
   .hero-img.top {
-    width: 100%;
-    transform: translate(-20px, -40px); /* smaller offset */
+    z-index: 3;
+    top: -6px;
+    transform: translateX(-50%) translateY(0);
+    width: 105%;
+    opacity: 1;
   }
 
+  /* bottom image: start slightly below and animate up into place */
   .hero-img.bottom {
-    width: 100%;
-    transform: translate(10px, 50px);   /* smaller offset */
+    z-index: 1;
+    top: 48px;
+    /* start slightly lower and invisible, then slide up */
+    transform: translateX(-50%) translateY(18px) scale(0.98);
+    opacity: 0;
+    width: 95%;
+    animation: heroBottomSlideUp 360ms ease 120ms forwards;
+  }
+
+  /* keyframes for slide-up animation (scoped to mobile) */
+  @keyframes heroBottomSlideUp {
+    to {
+      transform: translateX(-50%) translateY(0) scale(0.98);
+      opacity: 0.98;
+    }
   }
 }
-
-
 </style>
