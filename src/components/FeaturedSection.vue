@@ -154,6 +154,7 @@
   color: #001F36;
   margin-bottom: 8px;
   text-transform: uppercase;
+
 }
 
 .big-title {
@@ -161,6 +162,7 @@
   font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   font-weight: 500;
   margin-bottom: 8px;
+  margin-top: 8px;
   line-height: 1.3;
   color: #001F36;
 }
@@ -175,7 +177,7 @@
 }
 
 .cta {
-    margin: 20px 0;
+  margin: 20px 0 0;
   font-weight: 600;
   cursor: pointer;
 }
@@ -201,7 +203,11 @@
 
 
 /* ===== RESPONSIVE: 425px AND BELOW ===== */
-@media (max-width: 425px) {
+@media (max-width: 640px) {
+  .featured-section{
+    padding-right: 20px;
+    padding-left: 20px;
+  }
   .featured-grid {
     flex-direction: column;
     gap: 20px;
@@ -251,7 +257,7 @@
   .text-bg-right {
     width: 100%;
     display: block;
-    padding: 16px 20px;        /* extra left padding for clearer left alignment */
+    padding: 12px 20px;        /* extra left padding for clearer left alignment */
     box-sizing: border-box;
     border-radius: 0 0 16px 16px;
     text-align: left;          /* stack text to the left */

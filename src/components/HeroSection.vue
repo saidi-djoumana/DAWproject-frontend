@@ -35,7 +35,7 @@
 .hero {
   background-color: #F2F2F2;
   width: 100%;
-  padding: 80px 40px;
+  padding: 90px 40px;
   display: flex;
   justify-content: center;
   box-sizing: border-box;   /* ensure padding doesn't cause overflow */
@@ -178,11 +178,11 @@
   }
 
   .hero-img.top {
-    transform: translate(-15px, -10px);
+    transform: translate(-30px, -10px);
   }
 
   .hero-img.bottom {
-    transform: translate(15px, 10px);
+    transform: translate(80px, 100px);
   }
 }
 
@@ -214,11 +214,16 @@
   }
 
   .hero-img.top {
-    transform: translate(-12px, -8px);
+    transform: translate(-40px, -8px);
   }
 
   .hero-img.bottom {
-    transform: translate(12px, 8px);
+    transform: translate(50px, 90px);
+  }
+}
+@media (max-width: 640px) {
+  .hero {
+    padding: 50px 16px 100px
   }
 }
 
@@ -226,7 +231,7 @@
 @media (max-width: 480px) {
   /* container and text */
   .hero {
-    padding: 16px 12px 32px; /* added extra bottom padding so content has breathing room */
+    padding: 16px 12px 50px; 
     box-sizing: border-box;
     overflow-x: hidden;
   }
@@ -313,8 +318,8 @@
   .hero-img.top {
     z-index: 3;
     top: -6px;
-    transform: translateX(-50%) translateY(0);
-    width: 105%;
+    transform: translate(-180px, -20px);
+    width: 85%;
     opacity: 1;
   }
 
@@ -323,18 +328,60 @@
     z-index: 1;
     top: 48px;
     /* start slightly lower and invisible, then slide up */
-    transform: translateX(-50%) translateY(18px) scale(0.98);
-    opacity: 0;
-    width: 95%;
-    animation: heroBottomSlideUp 360ms ease 120ms forwards;
+   transform: translate(-60px, -8px);
+    opacity: 1;
+    width: 85%;
   }
 
-  /* keyframes for slide-up animation (scoped to mobile) */
-  @keyframes heroBottomSlideUp {
-    to {
-      transform: translateX(-50%) translateY(0) scale(0.98);
-      opacity: 0.98;
-    }
+}
+
+
+@media (max-width: 375px) {
+  .hero{
+    padding-bottom: 30px;
   }
+.hero-img.top {
+    z-index: 3;
+    top: -6px;
+    transform: translate(-140px, -20px);
+    width: 70%;
+    opacity: 1;
+  }
+
+  /* bottom image: start slightly below and animate up into place */
+  .hero-img.bottom {
+    z-index: 1;
+    top: 48px;
+    /* start slightly lower and invisible, then slide up */
+   transform: translate(-50px, -8px);
+    opacity: 1;
+    width: 70%;
+  }
+
+}
+
+
+@media (max-width: 360px) {
+  .hero{
+    padding-bottom: 30px;
+  }
+.hero-img.top {
+    z-index: 3;
+    top: -6px;
+    transform: translate(-130px, -20px);
+    width: 65%;
+    opacity: 1;
+  }
+
+  /* bottom image: start slightly below and animate up into place */
+  .hero-img.bottom {
+    z-index: 1;
+    top: 48px;
+    /* start slightly lower and invisible, then slide up */
+   transform: translate(-50px, -8px);
+    opacity: 1;
+    width: 65%;
+  }
+
 }
 </style>
