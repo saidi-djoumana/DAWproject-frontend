@@ -3,13 +3,13 @@
     <FeaturedSection />
     <HowItWorksSection />
     <HostEventSection />
-    <Footer/>
+    <Footer />
 </template>
 
 <script setup>
-import Hero from '@/components/HeroSection.vue';
-import FeaturedSection from '@/components/FeaturedSection.vue';
-import HowItWorksSection from '@/components/HowItWorksSection.vue';
-import HostEventSection from '@/components/HostEventSection.vue';
-import Footer from '@/components/footer.vue';
+import Hero from '@/components/home/HeroSection.vue';
+import FeaturedSection from '@/components/home/FeaturedSection.vue';
+import HowItWorksSection from '@/components/home/HowItWorksSection.vue';
+import HostEventSection from '@/components/home/HostEventSection.vue';
+import Footer from '@/components/Footer.vue';
 </script>

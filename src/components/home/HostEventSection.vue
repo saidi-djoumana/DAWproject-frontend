@@ -55,9 +55,9 @@
   width: 100%;
   max-width: 1200px;
   display: flex;
-  gap: clamp(1rem, 4vw, 3rem);      /* fluid gap between columns */
+  gap: 100px;
   box-sizing: border-box;
-  padding: 0 2.5rem;
+  padding: 0 ;
   align-items: center;
   justify-content: space-between;
 }
@@ -76,30 +76,28 @@
 
 .left .title {
   color: white;
+  font-size: 3.5rem;
   font-weight: 500;
   font-family: 'Poppins', sans-serif;
   text-align: left;
-  /* fluid typography: min / preferred / max */
-  font-size: clamp(1.8rem, 3.2vw, 3.5rem);
-  line-height: 1.05;
-  margin: 0 0 0.25rem 0;
 }
 
 .right .subtitle {
   color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
   font-family: 'Inter', sans-serif;
-  /* smaller fluid subtitle */
-  font-size: clamp(0.95rem, 1.2vw, 1.25rem);
-  margin: 0 0 0.75rem 0;
   text-align: left;
 }
 
 .btn-create {
   background-color: #CCEBEB;
   color: #000;
+  padding: 5px 30px;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.9rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -109,9 +107,6 @@
   margin-top: 1rem;
   transition: background-color 0.2s, transform 0.08s;
   align-self: flex-start;
-  /* responsive button sizing */
-  padding: clamp(6px, 0.6vw, 10px) clamp(10px, 1vw, 18px);
-  font-size: clamp(0.8rem, 0.9vw, 1rem);
   max-width: 160px;
 }
 
@@ -125,7 +120,6 @@
    - keep the existing smaller-breakpoint styles as fallback
    =================================================== */
 
-/* Exact 1024px layout: stack content, left align, equal spacing */
 /* Exact 1024px layout: stack content, left align, equal spacing */
 @media (width: 1024px) {
 
@@ -148,13 +142,13 @@
   }
 
   .left .title {
-    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     margin: 0;
     line-height: 1.12;
   }
 
   .right .subtitle {
-    font-size: clamp(0.95rem, 1vw, 1.05rem);
+    font-size: 1.05rem;
     margin: 0;
   }
 
@@ -167,7 +161,6 @@
 }
 
 /* Fallback / smaller tablets (existing rules) */
-/* Fallback / smaller tablets (<= 768px) */
 @media (max-width: 768px) {
 
   .host-event-section {
@@ -188,12 +181,12 @@
   }
 
   .left .title {
-    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-size: clamp(1.6rem, 6vw, 2.5rem);
     margin: 0;
   }
 
   .right .subtitle {
-    font-size: clamp(0.95rem, 2.2vw, 1rem);
+    font-size: 1rem;
     margin: 0;
   }
 
@@ -219,12 +212,12 @@
   }
 
   .left .title {
-    font-size: clamp(1.15rem, 7.5vw, 1.6rem);
+    font-size: clamp(1.25rem, 7vw, 1.8rem);
     line-height: 1.15;
   }
 
   .right .subtitle {
-    font-size: clamp(0.85rem, 3.2vw, 0.98rem);
+    font-size: 0.95rem;
     margin: 0;
   }
 
@@ -232,7 +225,7 @@
     max-width: 130px;
     padding: 6px 10px;
     font-size: 0.85rem;
-    margin-top: 16px;
+    margin-top: 30px;
   }
 }
 </style>

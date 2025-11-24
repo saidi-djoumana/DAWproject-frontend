@@ -4,6 +4,7 @@ import Register from '@/pages/Register.vue'
 import Home from '@/pages/Home.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
+import Events from '@/pages/Events.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,6 +14,7 @@ const router = createRouter({
       component: AppLayout,
       children: [
         {path: '', component: Home },
+        {path: 'events', component: Events },
       ]
     },
     {
