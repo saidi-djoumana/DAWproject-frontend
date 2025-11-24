@@ -39,19 +39,70 @@
 /* Left Title */
 .title {
   font-family: 'Poppins', sans-serif;
-  font-size: 60px;
+  font-size: clamp(32px, 6vw, 60px);
   font-weight: 500;
   line-height: 1.2;
+  max-width: 90%;
 }
 
 /* Right Subtitle */
 .subtitle {
   font-family: 'Inter', sans-serif;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 1.6;
   max-width: 450px;
 }
+
 .right {
   justify-self: end;
+}
+
+@media(max-width:1024px){
+    .title {
+        max-width: 100%;
+    }
+    .subtitle {
+        max-width: 100%;
+    }
+}
+
+/* 📱 Tablet */
+@media (max-width: 992px) {
+  .events-hero {
+    padding: 60px 0;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+    text-align: left;     /* ⭐ keep text aligned left */
+    gap: 0px;
+  }
+
+  .right {
+    justify-self: start;  /* ⭐ align right section to the left */
+  }
+
+  .subtitle {
+    margin: 20px 0 0 0;   /* ⭐ remove center auto */
+  }
+}
+
+/* 📱 Mobile */
+@media (max-width: 600px) {
+  .events-hero {
+    padding: 50px 0;
+  }
+
+  .container {
+    gap: 0px;
+  }
+
+  .title {
+    max-width: 100%;
+  }
+
+  .subtitle {
+    max-width: 90%;
+  }
 }
 </style>
