@@ -5,6 +5,7 @@ import Home from '@/pages/Home.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import Events from '@/pages/Events.vue'
+import Organizer from '@/pages/organizer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,7 @@ const router = createRouter({
       children: [
         {path: '', component: Home },
         {path: 'events', component: Events },
+        {path: 'organizer', component: Organizer },
       ]
     },
     {

@@ -11,7 +11,6 @@
 <script setup>
 import EventHero from '@/components/events/EventHero.vue'
 import EventsList from '@/components/events/EventsList.vue'
-import EventsFilters from '@/components/events/EventsFilters.vue';
 </script>
 
 <style scoped>

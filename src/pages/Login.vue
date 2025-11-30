@@ -1,49 +1,50 @@
 <template>
-    <div class="login-box">
-      <!-- Heading -->
-        <h5 class="login-title">Welcome back</h5>
-        <p class="login-subtitle">Sign in with your existing CuraLink account.</p>
+  <div class="login-box">
+    <!-- Heading -->
+    <h5 class="login-title">Welcome back</h5>
+    <p class="login-subtitle">Sign in with your existing CuraLink account.</p>
 
-      <!-- Form -->
-        <form class="login-form" @submit.prevent="login">
-            <div class="input-group">
-                <label for="email" class="input-label">email</label>
-                <input v-model="email" type="email" id="email" required />
-            </div>
+    <!-- Form -->
+    <form class="login-form" @submit.prevent="login">
+      <!-- Email -->
+      <div class="input-group">
+        <label for="email" class="input-label">Email</label>
+        <input v-model="email" type="email" id="email" required />
+      </div>
 
-            <div class="input-group password-group">
-                <label for="password" class="input-label">Password</label>
-                <router-link to="#" class="forgot-password">Forget password?</router-link>
-                <input
-                    v-model="password"
-                    :type="showPassword ? 'text' : 'password'"
-                    id="password"
-                    required
-                />
-                <!-- Font Awesome eye icon -->
-                <i
-                    class="fa-regular fa-eye toggle-password"
-                    @click="showPassword = !showPassword"
-                ></i>
-            </div>
+      <!-- Password -->
+      <div class="input-group password-group">
+        <label for="password" class="input-label">Password</label>
+        <router-link to="#" class="forgot-password">Forget password?</router-link>
+        <input
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          id="password"
+          required
+        />
+        <i
+          class="fa-regular fa-eye toggle-password"
+          @click="showPassword = !showPassword"
+        ></i>
+      </div>
 
+      <!-- Submit -->
+      <button type="submit" class="login-btn">Log in</button>
 
-            <button type="submit" class="login-btn">Log in</button>
-            <p v-if="errorMessage">{{ errorMessage }}</p>
-            
-        </form>
+      <!-- Messages -->
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+    </form>
 
-        <!-- Register link -->
-        <p class="register-text">
-            Don’t have an account yet?
-            <span class="register-link">
-                <router-link to="/auth/register">Sign up</router-link>
-            </span>
-        </p>
-    </div>
-
+    <!-- Register link -->
+    <p class="register-text">
+      Don’t have an account yet?
+      <span class="register-link">
+        <router-link to="/auth/register">Sign up</router-link>
+      </span>
+    </p>
+  </div>
 </template>
-
 
 <script setup>
 import { ref } from 'vue'
@@ -53,32 +54,40 @@ const showPassword = ref(false)
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
+const successMessage = ref('') // Added success message
 
 const login = async () => {
+  errorMessage.value = ''
+  successMessage.value = ''
+
   try {
     const response = await api.post('/login', {
       email: email.value,
       password: password.value
-    });
+    })
 
-    // Get token and user info consistently
-    const token = response.data.token;
-    const user = response.data.user;
+    // Save token and user in localStorage (optional)
+    const token = response.data.token
+    const user = response.data.user
+    localStorage.setItem('authToken', token)
+    localStorage.setItem('authUser', JSON.stringify(user))
 
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('authUser', JSON.stringify(user));
+    // Show success message instead of redirect
+    successMessage.value = 'Login successful!'
 
-    window.location.href = '/dashboard';
+    // Clear form (optional)
+    email.value = ''
+    password.value = ''
   } catch (error) {
-    console.error('Login failed:', error);
-    errorMessage.value = error.response?.data?.message || 'An error occurred during login.';
+    console.error('Login failed:', error)
+    errorMessage.value = error.response?.data?.message || 'An error occurred during login.'
   }
 }
 
 const logout = () => {
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('authUser');
-  window.location.href = '/auth/login';
+  localStorage.removeItem('authToken')
+  localStorage.removeItem('authUser')
+  window.location.href = '/auth/login'
 }
 </script>
 

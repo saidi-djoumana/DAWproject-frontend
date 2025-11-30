@@ -66,6 +66,8 @@
 
       <!-- Error message -->
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+
 
       <!-- Submit button -->
       <button type="submit" class="login-btn">Sign up</button>
@@ -78,6 +80,8 @@
 import { ref } from 'vue'
 import api from '@/api/axios.js'
 
+const successMessage = ref('')
+
 const name = ref('')
 const email = ref('')
 const role = ref('')
@@ -88,6 +92,8 @@ const showPassword2 = ref(false)
 const errorMessage = ref('')
 
 const register = async () => {
+  errorMessage.value = ''
+  successMessage.value = ''
   if (password.value !== confirmPassword.value) {
     errorMessage.value = "Passwords do not match."
     return
@@ -109,8 +115,13 @@ const register = async () => {
     localStorage.setItem('authToken', token);
     localStorage.setItem('authUser', JSON.stringify(user));
 
-    // Redirect to dashboard
-    window.location.href = '/dashboard';
+    successMessage.value = 'Registration successful! You can now log in.'
+
+    name.value = ''
+    email.value = ''
+    role.value = ''
+    password.value = ''
+    confirmPassword.value = ''
 
   } catch (error) {
     console.error('Register failed:', error);

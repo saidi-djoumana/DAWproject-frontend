@@ -73,11 +73,11 @@ watch([searchQuery, selectedType], () => {
 }
 
 .search-input {
-  flex: 0 0 300px;          /* fixed width */
+  flex: 0 0 600px;          /* fixed width */
 }
 
 .type-select {
-  width: 140px;              /* smaller dropdown */
+  width: 200px;              /* smaller dropdown */
 }
 
 </style>
