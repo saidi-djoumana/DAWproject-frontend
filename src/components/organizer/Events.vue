@@ -4,54 +4,27 @@
       <h2 class="section-title">Events</h2>
       
       <div class="events-grid">
-        <div class="event-card">
-          <h3 class="event-title">Event 1</h3>
-          <p class="event-description">Description of Event 1</p>
-          <p class="event-date">Date: 2023-12-01</p>
-          <a class="event-details">Détails</a>
-        </div>
-
-        <div class="event-card">
-          <h3 class="event-title">Event 2</h3>
-          <p class="event-description">Description of Event 2</p>
-          <p class="event-date">Date: 2023-12-15</p>
-          <a class="event-details">Détails</a>
-        </div>
-
-        <div class="event-card">
-          <h3 class="event-title">Event 3</h3>
-          <p class="event-description">Description of Event 3</p>
-          <p class="event-date">Date: 2024-01-10</p>
-          <a class="event-details">Détails</a>
-        </div>
-
-        <div class="event-card">
-          <h3 class="event-title">Event 4</h3>
-          <p class="event-description">Description of Event 4</p>
-          <p class="event-date">Date: 2024-01-20</p>
-          <a class="event-details">Détails</a>
-        </div>
-
-        <div class="event-card">
-          <h3 class="event-title">Event 5</h3>
-          <p class="event-description">Description of Event 5</p>
-          <p class="event-date">Date: 2024-02-05</p>
-          <a class="event-details">Détails</a>
-        </div>
-
-        <div class="event-card">
-          <h3 class="event-title">Event 6</h3>
-          <p class="event-description">Description of Event 6</p>
-          <p class="event-date">Date: 2024-02-15</p>
-          <a class="event-details">Détails</a>
+        <div v-for="event in events" :key="event.id" class="event-card">
+          <h3 class="event-title">{{ event.title }}</h3>
+          <p class="event-description">{{ event.description }}</p>
+          <p class="event-date">Date: {{ event.date }}</p>
+          <a class="event-details" @click="openEventDetails(event)">Détails</a>
         </div>
       </div>
     </div>
+
+    <!-- Event Details Modal -->
+    <EventDetails
+      :is-open="isModalOpen" 
+      :event-data="selectedEvent"
+      @close="closeEventDetails"
+    />
   </section>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import EventDetails from './EventDetails.vue'
 
 const events = reactive([
   {
@@ -91,6 +64,19 @@ const events = reactive([
     date: '2024-02-15'
   }
 ])
+
+const isModalOpen = ref(false)
+const selectedEvent = ref(null)
+
+const openEventDetails = (event) => {
+  selectedEvent.value = event
+  isModalOpen.value = true
+}
+
+const closeEventDetails = () => {
+  isModalOpen.value = false
+  selectedEvent.value = null
+}
 </script>
 
 <style scoped>

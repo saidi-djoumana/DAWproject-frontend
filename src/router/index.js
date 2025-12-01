@@ -6,6 +6,7 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import Events from '@/pages/Events.vue'
 import Organizer from '@/pages/organizer.vue'
+import Author from '@/pages/Author.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,7 @@ const router = createRouter({
         {path: '', component: Home },
         {path: 'events', component: Events },
         {path: 'organizer', component: Organizer },
+        {path: 'author', component: Author },
       ]
     },
     {
