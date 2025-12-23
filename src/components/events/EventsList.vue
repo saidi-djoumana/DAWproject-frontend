@@ -16,41 +16,40 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import api from '@/api/axios'
 import EventCard from './EventCard.vue'
 import EventFilters from './EventsFilters.vue'
-import hero1 from '@/assets/hero1.png'
-import hero2 from '@/assets/hero2.png'
-import hero3 from '@/assets/conferences.png'
 
-const originalEvents = [
-  {
-    id: 1,
-    title: 'International Conference on Medical Data Science 2025',
-    tag: 'Conference',
-    location: 'Université Constantine 2',
-    date: 'June 15–18, 2025',
-    image: hero1
-  },
-  {
-    id: 2,
-    title: 'AI in Healthcare Workshop 2025',
-    tag: 'Workshop',
-    location: 'Université Algiers',
-    date: 'July 2–4, 2025',
-    image: hero2
-  },
-  {
-    id: 3,
-    title: 'Global Health Congress 2025',
-    tag: 'Congress',
-    location: 'Université Oran',
-    date: 'August 10–12, 2025',
-    image: hero3
+// Default image in case the event doesn't have one
+import defaultImage from '@/assets/default-event.png'
+
+const originalEvents = ref([])
+const filteredEvents = ref([])
+
+// Fetch events from backend
+const fetchEvents = async () => {
+  try {
+    const response = await api.get('/events')
+    if (response.data.success) {
+      originalEvents.value = response.data.data.map(event => ({
+        ...event,
+        // Format dates for display
+        date: `${new Date(event.start_date).toLocaleDateString()} – ${new Date(event.end_date).toLocaleDateString()}`,
+        tag: event.type.charAt(0).toUpperCase() + event.type.slice(1),
+        // Use backend image if exists, otherwise default
+        image: event.image ? `http://127.0.0.1:8000${event.image}` : defaultImage
+      }))
+      filteredEvents.value = [...originalEvents.value]
+    }
+  } catch (error) {
+    console.error('Error fetching events:', error)
   }
-]
+}
 
-import { ref } from 'vue'
-const filteredEvents = ref([...originalEvents])
+onMounted(() => {
+  fetchEvents()
+})
 </script>
 
 <style scoped>

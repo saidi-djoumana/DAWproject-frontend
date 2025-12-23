@@ -9,7 +9,7 @@
         <p class="subtitle">
           Organize and share your research with the global health science community
         </p>
-        <router-link to="/auth/signup" class="btn-create">
+        <router-link to="/auth/register" class="btn-create">
           Create Event
         </router-link>
       </div>
