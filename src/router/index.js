@@ -8,6 +8,7 @@ import Events from '@/pages/Events.vue'
 import Organizer from '@/pages/organizer.vue'
 import Author from '@/pages/Author.vue'
 import Evaluation from '@/pages/Evaluation.vue'
+import Admin from '@/pages/Admin.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,7 @@ const router = createRouter({
         {path: 'organizer', component: Organizer },
         {path: 'author', component: Author },
         {path: 'evaluation', component: Evaluation },
+        {path: 'admin', component: Admin },
       ]
     },
     {

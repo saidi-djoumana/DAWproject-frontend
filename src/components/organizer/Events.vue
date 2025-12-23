@@ -13,7 +13,6 @@
       </div>
     </div>
 
-    <!-- Event Details Modal -->
     <EventDetails
       :is-open="isModalOpen" 
       :event-data="selectedEvent"
