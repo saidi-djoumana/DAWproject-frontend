@@ -1,4 +1,7 @@
 <script setup>
+import { ref, defineProps, defineEmits } from 'vue';
+import axios from 'axios';
+
 const props = defineProps({
   organizerData: {
     type: Object,
@@ -6,7 +9,34 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'confirmed']); // 'confirmed' lets parent know to refresh table
+const isLoading = ref(false);
+const errorMessage = ref('');
+
+// Approve organizer function
+const approveOrganizer = async () => {
+  try {
+    isLoading.value = true;
+    const token = localStorage.getItem('authToken');
+    const res = await axios.post(
+      `http://localhost:8000/api/admin/organizers/${props.organizerData.id}/approve`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.data.success) {
+      emit('confirmed'); // parent can remove organizer from table
+      emit('close');     // close the modal
+    } else {
+      errorMessage.value = res.data.message || 'Failed to approve organizer';
+    }
+  } catch (err) {
+    console.error(err);
+    errorMessage.value = 'Error approving organizer';
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -17,7 +47,7 @@ const emit = defineEmits(['close']);
 
     <div class="info-section">
       <h3 class="section-title">Confirmation Message:</h3>
-      <p class="message-text">The organizer has been successfully activated!</p>
+      <p class="message-text">Are you sure you want to approve this organizer?</p>
     </div>
 
     <div class="info-section">
@@ -32,17 +62,21 @@ const emit = defineEmits(['close']);
       </div>
       <div class="detail-row">
         <span class="label">Phone:</span>
-        <span class="value">{{ organizerData.phone }}</span>
+        <span class="value">{{ organizerData.phone || 'N/A' }}</span>
       </div>
     </div>
 
-    <div class="info-section">
-      <h3 class="section-title">Approval Timestamp:</h3>
-      <p class="value">{{ organizerData.timestamp }}</p>
+    <div v-if="errorMessage" class="info-section">
+      <p style="color:red">{{ errorMessage }}</p>
     </div>
 
     <footer class="card-footer">
-      <button @click="$emit('close')" class="btn-done">Done</button>
+      <button @click="approveOrganizer" :disabled="isLoading" class="btn-done">
+        {{ isLoading ? 'Approving...' : 'Approve' }}
+      </button>
+      <button @click="$emit('close')" class="btn-done" style="margin-left:10px;background:#F87171;color:white;border:none;">
+        Cancel
+      </button>
     </footer>
   </div>
 </template>

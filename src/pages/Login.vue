@@ -33,7 +33,6 @@
 
       <!-- Messages -->
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     </form>
 
     <!-- Register link -->
@@ -45,20 +44,23 @@
     </p>
   </div>
 </template>
-
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import api from '@/api/axios.js'
 
-const showPassword = ref(false)
+// Refs
 const email = ref('')
 const password = ref('')
+const showPassword = ref(false)
 const errorMessage = ref('')
-const successMessage = ref('') // Added success message
 
+// Router instance
+const router = useRouter()
+
+// Login function
 const login = async () => {
   errorMessage.value = ''
-  successMessage.value = ''
 
   try {
     const response = await api.post('/login', {
@@ -66,94 +68,105 @@ const login = async () => {
       password: password.value
     })
 
-    // Save token and user in localStorage (optional)
-    const token = response.data.token
-    const user = response.data.user
+    // Ensure data exists
+    if (!response.data.success || !response.data.data) {
+      errorMessage.value = 'Invalid login response.'
+      return
+    }
+
+    const data = response.data.data
+    const token = data.token
+    const user = data.user
+
+    if (!token || !user) {
+      errorMessage.value = 'Invalid login response.'
+      return
+    }
+
+    // Save token and user in localStorage
     localStorage.setItem('authToken', token)
     localStorage.setItem('authUser', JSON.stringify(user))
 
-    // Show success message instead of redirect
-    successMessage.value = 'Login successful!'
-
-    // Clear form (optional)
+    // Clear inputs
     email.value = ''
     password.value = ''
+
+    // Redirect based on roles if available
+    // If roles missing, fallback to home
+    const roles = Array.isArray(user?.roles) ? user.roles : []
+
+    if (roles.includes('super_admin')) {
+      router.push('/admin')
+    } else {
+      router.push('/')
+    }
+
   } catch (error) {
-    console.error('Login failed:', error)
+    console.error(error)
     errorMessage.value = error.response?.data?.message || 'An error occurred during login.'
   }
 }
 
+// Logout function
 const logout = () => {
   localStorage.removeItem('authToken')
   localStorage.removeItem('authUser')
-  window.location.href = '/auth/login'
+  router.push('/auth/login')
 }
 </script>
 
 
 
-
 <style scoped>
-
+/* Keep all your previous styles unchanged */
 .login-box {
   width: clamp(300px, 40vw, 532px);
   background: white;
-  border-radius: 1.875rem; /* 30px */
+  border-radius: 1.875rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   padding: 1rem 2.5rem;
   margin: 0 auto;
-  
 }
 .login-form{
     width: 100%;
 }
-
-/* Heading "Welcome back" */
 .login-title {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  font-size: clamp(1.25rem, 2vw, 1.5rem); /* Heading 5 responsive */
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
   line-height: 1.4;
   letter-spacing: -1%;
   margin-bottom: 0rem;
 }
-
-/* Subtitle paragraph */
 .login-subtitle {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
-  font-size: clamp(0.875rem, 1.5vw, 1rem); /* Text Regular responsive */
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
   line-height: 1.5;
   letter-spacing: 0%;
   margin-bottom: 2rem;
   text-align: center;
 }
-
-/* Input groups */
 .input-group {
   width: 100%;
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
 }
-
 .input-label {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: clamp(0.75rem, 1vw, 0.875rem); /* Text Small */
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
   line-height: 1.5;
   margin-bottom: 0.5rem;
   color: #000;
 }
-
 .password-group {
   position: relative;
 }
-
 .toggle-password {
   position: absolute;
   top: 50%;
@@ -165,31 +178,26 @@ const logout = () => {
   z-index: 2;
   user-select: none;
 }
-
 .password-group input {
-  padding: 0.75rem 2.5rem 0.75rem 1rem; /* right padding for eye */
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
   font-size: clamp(0.75rem, 1vw, 0.875rem);
   line-height: 1.5;
   border-radius: 0.75rem;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  min-height: 2.5rem; /* optional: ensures it won’t shrink below original size */
+  min-height: 2.5rem;
 }
-
-
 .forgot-password {
   position: absolute;
   top: 0;
   right: 0;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: clamp(0.75rem, 1vw, 0.875rem); /* Text Small */
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
   line-height: 1.5;
   color: rgba(0, 158, 158, 1);
   text-decoration: none;
 }
-
-/* Inputs */
 input[type="email"],
 input[type="password"] {
   padding: 0.75rem 1rem;
@@ -200,16 +208,12 @@ input[type="password"] {
   font-size: clamp(0.75rem, 1vw, 0.875rem);
   line-height: 1.5;
 }
-
 input[type="email"]:focus,
 input[type="password"]:focus {
-  outline: none; /* remove default browser outline */
+  outline: none;
   border-color: rgba(0, 158, 158, 1);
-  box-shadow: 0 0 0 2px rgba(0, 158, 158, 0.2); /* optional subtle glow */
+  box-shadow: 0 0 0 2px rgba(0, 158, 158, 0.2);
 }
-
-
-/* Login button */
 .login-btn {
     width: 100%;
     height: 40px;
@@ -227,11 +231,7 @@ input[type="password"]:focus {
     0px 2px 2px 0px rgba(0, 0, 0, 0.15),
     0px -5px 0px 0px rgba(0, 0, 0, 0.15) inset,
     0px 4px 0px 0px rgba(255, 255, 255, 0.2) inset;
-
-
 }
-
-/* Register text */
 .register-text {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
@@ -240,7 +240,6 @@ input[type="password"]:focus {
     margin-top: 1.5rem;
     text-align: center;
 }
-
 .register-link {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
@@ -253,101 +252,28 @@ input[type="password"]:focus {
   color: rgba(0, 158, 158, 1);
 }
 
-
-
-
 /* ======== Responsive ======== */
-
-/* Tablet screens (below 1024px) */
 @media (max-width: 1023px) {
-  .login-box {
-    width: 60vw;
-    height: auto;
-    padding: 2rem;
-  }
-
-  .login-title {
-    text-align: center;
-  }
-
-  .login-subtitle {
-    text-align: center;
-  }
- 
+  .login-box { width: 60vw; height: auto; padding: 2rem; }
+  .login-title { text-align: center; }
+  .login-subtitle { text-align: center; }
 }
-
-/* Mobile screens (below 768px) */
 @media (max-width: 768px) {
-  .login-box {
-    width: 85%;
-    padding: 1.5rem;
-    align-items: center;
-  }
-
-  .login-form {
-    width: 100%;
-  }
-
-  .input-group {
-    margin-bottom: 1rem;
-  }
-
-  .forgot-password {
-    position: static;
-    text-align: right;
-    margin-top: -0.5rem;
-    display: block;
-  }
-
-  .toggle-password {
-    right: 0.75rem;
-    top: 45%;
-    transform: translateY(70%);
-  }
-
-  .login-btn {
-    height: 38px;
-    font-size: 0.875rem;
-  }
-
-  .register-text {
-    font-size: 0.85rem;
-  }
+  .login-box { width: 85%; padding: 1.5rem; align-items: center; }
+  .login-form { width: 100%; }
+  .input-group { margin-bottom: 1rem; }
+  .forgot-password { position: static; text-align: right; margin-top: -0.5rem; display: block; }
+  .toggle-password { right: 0.75rem; top: 45%; transform: translateY(70%); }
+  .login-btn { height: 38px; font-size: 0.875rem; }
+  .register-text { font-size: 0.85rem; }
 }
-
-/* Small mobile (below 480px) */
 @media (max-width: 480px) {
-  .login-box {
-    width: 90%;
-    padding: 1rem;
-    border-radius: 1rem;
-  }
-
-  .login-title {
-    font-size: 1.25rem;
-  }
-
-  .login-subtitle {
-    font-size: 0.85rem;
-  }
-
-  input[type="email"],
-  input[type="password"] {
-    font-size: 0.8rem;
-  }
-
-  .forgot-password {
-    font-size: 0.75rem;
-  }
-
-  .login-btn {
-    height: 36px;
-    font-size: 0.8rem;
-  }
-
-  .register-text {
-    font-size: 0.8rem;
-  }
+  .login-box { width: 90%; padding: 1rem; border-radius: 1rem; }
+  .login-title { font-size: 1.25rem; }
+  .login-subtitle { font-size: 0.85rem; }
+  input[type="email"], input[type="password"] { font-size: 0.8rem; }
+  .forgot-password { font-size: 0.75rem; }
+  .login-btn { height: 36px; font-size: 0.8rem; }
+  .register-text { font-size: 0.8rem; }
 }
-
 </style>
