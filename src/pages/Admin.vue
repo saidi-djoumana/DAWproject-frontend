@@ -4,6 +4,9 @@
     <organizersToApprove />
     <platformUsersList />
     <createOrganizer />
+    <allEvents />
+    <allSubmissions />
+    <allEvaluations />
     <Footer />  
 
     
@@ -17,4 +20,7 @@ import Dashboard from '@/components/admin/dashboard.vue';
 import organizersToApprove from '@/components/admin/organizersToApprove.vue';
 import platformUsersList from '@/components/admin/platformUsersList.vue';
 import createOrganizer from '@/components/admin/createOrganizer.vue';
+import allEvents from '@/components/admin/allEvents.vue';
+import allSubmissions from '@/components/admin/allSubmissions.vue';
+import allEvaluations from '@/components/admin/allEvaluations.vue';
 </script>
