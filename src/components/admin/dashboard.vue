@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import api from '@/api/axios' // ✅ Changed from 'axios' to your configured api
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js'
 import { Pie } from 'vue-chartjs'
 
@@ -86,13 +86,10 @@ const submissionsByStatusData = computed(() => {
   }
 })
 
-// Fetch dashboard data
+// Fetch dashboard data - ✅ Now using api instead of axios
 const fetchDashboard = async () => {
   try {
-    const token = localStorage.getItem('authToken')
-    const res = await axios.get('http://localhost:8000/api/admin/dashboard', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    const res = await api.get('/admin/dashboard') // ✅ Simplified - token automatically added by interceptor
     if (res.data.success) {
       stats.value = res.data.data
       isLoaded.value = true
@@ -101,7 +98,7 @@ const fetchDashboard = async () => {
     }
   } catch (error) {
     console.error(error)
-    errorMessage.value = 'Error fetching dashboard data'
+    errorMessage.value = error.response?.data?.message || 'Error fetching dashboard data'
   }
 }
 
@@ -200,6 +197,7 @@ onMounted(fetchDashboard)
 <style scoped>
 .dashboard-container { background-color: #F3F4F6; font-family: 'Inter', sans-serif; padding: 40px; min-height: 100vh; color: #111827; max-width: 1300px; margin: 30px auto; }
 .dashboard-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 30px; }
+.error-message { color: #D9534F; margin-bottom: 20px; font-weight: 500; padding: 12px; background-color: #FEE2E2; border-radius: 8px; }
 .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
 .bottom-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .card { background: #ffffff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; }

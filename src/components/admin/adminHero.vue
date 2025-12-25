@@ -34,6 +34,7 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 40px;
+  height: 30vh;
 }
 
 /* Left Title */
