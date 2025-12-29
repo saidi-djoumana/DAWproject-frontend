@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import api from '@/api/axios'; // make sure this points to your configured Axios instance with token
 
 const form = ref({
   name: '',
@@ -10,8 +11,24 @@ const form = ref({
   country: ''
 });
 
-const handleCreate = () => {
-  console.log('Creating new organizer:', form.value);
+const handleCreate = async () => {
+  try {
+    const response = await api.post('/admin/users/organizer', form.value);
+    console.log('Organizer created:', response.data);
+    alert('Organizer created successfully!');
+    // Reset form
+    form.value = {
+      name: '',
+      email: '',
+      password: '',
+      phone: '',
+      institution: '',
+      country: ''
+    };
+  } catch (error) {
+    console.error('Failed to create organizer:', error.response?.data || error);
+    alert('Failed to create organizer. Check console for details.');
+  }
 };
 </script>
 
@@ -64,7 +81,6 @@ const handleCreate = () => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* ✅ Component NO LONGER controls width */
 .page-wrapper {
   background-color: #F3F4F6;
   width: 100%;
@@ -73,10 +89,9 @@ const handleCreate = () => {
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
   max-width: 1380px;
-    margin: 20px auto;
+  margin: 20px auto;
 }
 
-/* Header */
 .section-header h1 {
   font-size: 24px;
   font-weight: 700;
@@ -84,7 +99,6 @@ const handleCreate = () => {
   color: #000;
 }
 
-/* White Card */
 .form-card {
   background: #ffffff;
   border-radius: 8px;
@@ -94,7 +108,6 @@ const handleCreate = () => {
   box-sizing: border-box;
 }
 
-/* Form layout */
 .organizer-form {
   display: flex;
   flex-direction: column;
@@ -122,7 +135,6 @@ const handleCreate = () => {
   box-sizing: border-box;
 }
 
-/* Actions */
 .form-actions {
   display: flex;
   justify-content: center;

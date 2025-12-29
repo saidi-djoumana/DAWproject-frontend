@@ -1,5 +1,5 @@
 <template>
-    <NavbarApp />
+    <adminNavBar />
     <AdminHero />
     <Dashboard />
     <organizersToApprove />
@@ -24,5 +24,5 @@ import createOrganizer from '@/components/admin/createOrganizer.vue';
 import allEvents from '@/components/admin/allEvents.vue';
 import allSubmissions from '@/components/admin/allSubmissions.vue';
 import allEvaluations from '@/components/admin/allEvaluations.vue';
-import NavbarApp from '@/components/NavbarApp.vue';
+import adminNavBar from '@/components/admin/adminNavBar.vue';
 </script>

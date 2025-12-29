@@ -1,40 +1,37 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import api from '@/api/axios'; // your configured axios instance
 
-// Mock data based on your requirements
-const events = ref([
-  {
-    details: 'Annual Science Conference 2023',
-    organizerName: 'Alice Johnson',
-    organizerEmail: 'alice.johnson@example.com',
-    createdAt: '2023-01-15'
-  },
-  {
-    details: 'Tech Innovations Expo',
-    organizerName: 'Bob Smith',
-    organizerEmail: 'bob.smith@example.com',
-    createdAt: '2023-02-20'
-  },
-  {
-    details: 'Environmental Awareness Workshop',
-    organizerName: 'Charlie Brown',
-    organizerEmail: 'charlie.brown@example.com',
-    createdAt: '2023-03-10'
-  },
-  {
-    details: 'Health and Wellness Fair',
-    organizerName: 'Dana White',
-    organizerEmail: 'dana.white@example.com',
-    createdAt: '2023-04-05'
-  },
-  {
-    details: 'Global Education Summit',
-    organizerName: 'Eve Davis',
-    organizerEmail: 'eve.davis@example.com',
-    createdAt: '2023-05-15'
+const events = ref([]);
+const error = ref(null);
+
+const fetchEvents = async () => {
+  try {
+    const response = await api.get('/admin/events'); // matches your backend route
+    // If your backend returns data in `data` key
+    events.value = response.data.data.map(event => ({
+      details: event.title, // or event.description if you want
+      organizerName: event.organizer?.name || 'N/A',
+      organizerEmail: event.organizer?.email || 'N/A',
+      createdAt: new Date(event.created_at).toLocaleString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+})
+// Example: "December 29, 2025"
+
+    }));
+  } catch (err) {
+    console.error('Failed to fetch events:', err);
+    error.value = 'Failed to load events.';
   }
-]);
+};
+
+onMounted(() => {
+  fetchEvents();
+});
 </script>
+
 
 <template>
   <div class="page-container">

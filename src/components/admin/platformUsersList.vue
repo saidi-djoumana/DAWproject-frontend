@@ -1,19 +1,47 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import api from '@/api/axios';
 import ToggleUserStatus from './toggleUserStatus.vue';
 
-// Mock data based on the "Complete List of Platform Users" screenshot
-const users = ref([
-  { name: 'Alice Johnson', email: 'alice.johnson@example.com', phone: '(123) 456-7890', institution: 'University A', country: 'USA', roles: 'Admin', createdAt: '2023-01-15', status: 'Active' },
-  { name: 'Bob Smith', email: 'bob.smith@example.com', phone: '(234) 567-8901', institution: 'University B', country: 'Canada', roles: 'User', createdAt: '2023-02-20', status: 'Active' },
-  { name: 'Charlie Brown', email: 'charlie.brown@example.com', phone: '(345) 678-9012', institution: 'University C', country: 'UK', roles: 'Moderator', createdAt: '2023-03-10', status: 'Active' },
-  { name: 'Dana White', email: 'dana.white@example.com', phone: '(456) 789-0123', institution: 'University D', country: 'Australia', roles: 'Admin', createdAt: '2023-04-05', status: 'Active' },
-  { name: 'Eve Davis', email: 'eve.davis@example.com', phone: '(567) 890-1234', institution: 'University E', country: 'Germany', roles: 'User', createdAt: '2023-05-15', status: 'Active' }
-]);
-
+/* =============================
+   State
+============================= */
+const users = ref([]);
 const showToggleModal = ref(false);
 const selectedUser = ref(null);
 
+/* =============================
+   Fetch users (ADMIN)
+============================= */
+const fetchUsers = async () => {
+  try {
+    const res = await api.get('/admin/users');
+
+    users.value = res.data.data.map(user => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone ?? '',
+      institution: user.institution ?? '',
+      country: user.country ?? '',
+      roles: Array.isArray(user.roles)
+        ? user.roles.map(role => role.name).join(', ')
+        : String(user.roles ?? ''),
+          createdAt: new Date(user.created_at).toLocaleString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}),
+      status: user.is_active ? 'Active' : 'Inactive'
+    }));
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
+};
+
+/* =============================
+   Modal handling
+============================= */
 const openToggleModal = (user) => {
   selectedUser.value = { ...user };
   showToggleModal.value = true;
@@ -24,19 +52,50 @@ const closeToggleModal = () => {
   selectedUser.value = null;
 };
 
-const handleUpdateStatus = (updatedUser) => {
-  // Logic to update the status in the local list
-  const index = users.value.findIndex(u => u.email === updatedUser.email);
-  if (index !== -1) {
-    users.value[index].status = users.value[index].status === 'Active' ? 'Inactive' : 'Active';
+/* =============================
+   Toggle user status
+============================= */
+const handleUpdateStatus = async () => {
+  if (!selectedUser.value) return;
+
+  try {
+    await api.put(`/admin/users/${selectedUser.value.id}/toggle-status`);
+
+    const index = users.value.findIndex(
+      u => u.email === selectedUser.value.email
+    );
+
+    if (index !== -1) {
+      users.value[index].status =
+        users.value[index].status === 'Active'
+          ? 'Inactive'
+          : 'Active';
+    }
+  } catch (error) {
+    console.error('Failed to update status:', error);
+  } finally {
+    closeToggleModal();
   }
-  closeToggleModal();
 };
 
-const handleDelete = (user) => {
-  console.log('Deleting user:', user.name);
+/* =============================
+   Delete user
+============================= */
+const handleDelete = async (user) => {
+  if (!confirm(`Delete ${user.name}?`)) return;
+
+  try {
+    await api.delete(`/admin/users/${user.id}`);
+    users.value = users.value.filter(u => u.email !== user.email);
+  } catch (error) {
+    console.error('Failed to delete user:', error);
+  }
 };
+
+onMounted(fetchUsers);
 </script>
+
+
 
 <template>
   <div class="page-container">

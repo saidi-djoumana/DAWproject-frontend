@@ -1,43 +1,26 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import api from '@/api/axios'; // your configured Axios instance
 
-const submissions = ref([
-  {
-    title: 'Exploring Quantum Computing',
-    eventName: 'Annual Science Conference 2023',
-    authorName: 'Alice Johnson',
-    authorEmail: 'alice.johnson@example.com',
-    createdAt: '2023-01-10'
-  },
-  {
-    title: 'AI in Healthcare',
-    eventName: 'Tech Innovations Expo',
-    authorName: 'Bob Smith',
-    authorEmail: 'bob.smith@example.com',
-    createdAt: '2023-02-15'
-  },
-  {
-    title: 'Sustainable Energy Solutions',
-    eventName: 'Environmental Awareness Workshop',
-    authorName: 'Charlie Brown',
-    authorEmail: 'charlie.brown@example.com',
-    createdAt: '2023-03-05'
-  },
-  {
-    title: 'Mental Health Awareness',
-    eventName: 'Health and Wellness Fair',
-    authorName: 'Dana White',
-    authorEmail: 'dana.white@example.com',
-    createdAt: '2023-04-12'
-  },
-  {
-    title: 'Innovations in Education',
-    eventName: 'Global Education Summit',
-    authorName: 'Eve Davis',
-    authorEmail: 'eve.davis@example.com',
-    createdAt: '2023-05-20'
+const submissions = ref([]);
+
+const fetchSubmissions = async () => {
+  try {
+    const response = await api.get('/admin/submissions');
+    // Map backend data to table format
+    submissions.value = response.data.data.map(sub => ({
+      title: sub.title,
+      eventName: sub.event?.title || 'N/A',
+      authorName: sub.authors?.map(a => a.name).join(', ') || 'N/A',
+      authorEmail: sub.authors?.map(a => a.email).join(', ') || 'N/A',
+      createdAt: new Date(sub.created_at).toLocaleDateString() // format date
+    }));
+  } catch (error) {
+    console.error('Failed to fetch submissions:', error);
   }
-]);
+};
+
+onMounted(fetchSubmissions);
 </script>
 
 <template>
@@ -72,7 +55,6 @@ const submissions = ref([
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 .page-container {
   background-color: #F3F4F6;

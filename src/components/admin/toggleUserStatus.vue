@@ -1,12 +1,16 @@
 <script setup>
-const props = defineProps({
+defineProps({
   userData: {
     type: Object,
     required: true
   }
 });
 
-defineEmits(['close', 'update']);
+const emit = defineEmits(['close', 'update']);
+
+const updateStatus = () => {
+  emit('update');
+};
 </script>
 
 <template>
@@ -23,12 +27,17 @@ defineEmits(['close', 'update']);
         <p><span class="label">Phone:</span> {{ userData.phone }}</p>
         <p><span class="label">Institution:</span> {{ userData.institution }}</p>
         <p><span class="label">Country:</span> {{ userData.country }}</p>
-        <p><span class="label">Current Status:</span> <strong>{{ userData.status }}</strong></p>
+        <p>
+          <span class="label">Current Status:</span>
+          <strong>{{ userData.status }}</strong>
+        </p>
       </div>
     </div>
 
     <footer class="card-footer">
-      <button @click="$emit('update', userData)" class="btn-update">Update Status</button>
+      <button @click="updateStatus" class="btn-update">
+        Update Status
+      </button>
     </footer>
   </div>
 </template>

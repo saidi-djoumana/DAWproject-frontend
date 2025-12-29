@@ -1,39 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import api from '@/api/axios'; // your configured Axios instance
 
-// Mock data based on the provided "List of All Evaluations" screenshot
-const evaluations = ref([
-  {
-    title: 'Exploring Quantum Computing',
-    evaluatorName: 'Dr. Emily Carter',
-    evaluatorEmail: 'emily.carter@example.com',
-    createdAt: '2023-01-12'
-  },
-  {
-    title: 'AI in Healthcare',
-    evaluatorName: 'Prof. Mark Taylor',
-    evaluatorEmail: 'mark.taylor@example.com',
-    createdAt: '2023-02-18'
-  },
-  {
-    title: 'Sustainable Energy Solutions',
-    evaluatorName: 'Dr. Sarah Wilson',
-    evaluatorEmail: 'sarah.wilson@example.com',
-    createdAt: '2023-03-08'
-  },
-  {
-    title: 'Mental Health Awareness',
-    evaluatorName: 'Dr. John Smith',
-    evaluatorEmail: 'john.smith@example.com',
-    createdAt: '2023-04-15'
-  },
-  {
-    title: 'Innovations in Education',
-    evaluatorName: 'Prof. Anna Brown',
-    evaluatorEmail: 'anna.brown@example.com',
-    createdAt: '2023-05-22'
+const evaluations = ref([]);
+
+const fetchEvaluations = async () => {
+  try {
+    // Super Admin route
+    const response = await api.get('/admin/evaluations');
+
+    // Map the response to the format we need
+    evaluations.value = response.data.data.map(ev => ({
+      title: ev.submission?.title || 'N/A',
+      evaluatorName: ev.evaluator?.name || 'N/A',
+      evaluatorEmail: ev.evaluator?.email || 'N/A',
+      createdAt: ev.created_at ? new Date(ev.created_at).toLocaleDateString() : 'N/A'
+    }));
+  } catch (error) {
+    console.error('Failed to fetch evaluations:', error);
   }
-]);
+};
+
+// Fetch on component mount
+onMounted(fetchEvaluations);
 </script>
 
 <template>
@@ -66,8 +55,6 @@ const evaluations = ref([
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 .page-container {
   background-color: #F3F4F6;
   padding: 40px;
@@ -97,7 +84,7 @@ const evaluations = ref([
 }
 
 .evaluation-table thead tr {
-  background-color: #E5E7EB; /* Matching the grey header background */
+  background-color: #E5E7EB;
 }
 
 .evaluation-table th {
@@ -106,7 +93,7 @@ const evaluations = ref([
   font-weight: 700;
   text-align: left;
   color: #374151;
-  text-transform: uppercase; /* Matching the uppercase style of headers */
+  text-transform: uppercase;
 }
 
 .evaluation-table td {
@@ -116,7 +103,6 @@ const evaluations = ref([
   color: #4B5563;
 }
 
-/* Hover effect to maintain consistency with your other tables */
 .evaluation-table tbody tr:hover {
   background-color: #F9FAFB;
 }
