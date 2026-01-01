@@ -7,33 +7,48 @@
         Search conferences, workshops, congresses and seminars in health research
       </p>
 
-      <!-- Two-column section -->
       <div class="featured-grid">
-        <!-- Left section: 2/3 -->
+        <!-- Left section: Conferences -->
         <div class="featured-left">
           <img src="@/assets/conferences.png" alt="Conferences" class="featured-img-left">
           <div class="featured-text text-bg-left">
             <h5 class="small-title">Conferences</h5>
             <h3 class="big-title">Browse upcoming health science conferences</h3>
             <p>Global events connecting researchers and medical professionals</p>
-            <span class="cta">Browse &gt;</span>
+
+            <button class="cta" type="button" @click="goToType('conference')">
+              Browse &gt;
+            </button>
           </div>
         </div>
 
-        <!-- Right section: 1/3 -->
+        <!-- Right section: Workshops -->
         <div class="featured-right">
           <img src="@/assets/workshops.png" alt="Workshops" class="featured-img-right">
           <div class="featured-text text-bg-right">
             <h5 class="small-title">Workshops</h5>
             <h3 class="big-title">Interactive learning opportunities for researchers</h3>
             <p>Hands-on sessions for scientific skill development</p>
-            <span class="cta">Explore &gt;</span>
+
+            <button class="cta" type="button" @click="goToType('workshop')">
+              Explore &gt;
+            </button>
           </div>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToType = (type) => {
+  router.push({ path: '/events', query: { type } })
+}
+</script>
 
 <style scoped>
 /* ===== FEATURED TITLE SECTION ===== */
@@ -98,7 +113,7 @@
 }
 
 .featured-img-left {
-  flex: 0 0 40%; /* narrower width for first image */
+  flex: 0 0 40%;
   width: 100%;
   object-fit: cover;
   border-top-left-radius: 16px;
@@ -112,7 +127,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 20px;
-  text-align: left; /* align text to left */
+  text-align: left;
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
 }
@@ -141,7 +156,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 20px;
-  text-align: left; /* align text to left */
+  text-align: left;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
 }
@@ -154,7 +169,6 @@
   color: #001F36;
   margin-bottom: 8px;
   text-transform: uppercase;
-
 }
 
 .big-title {
@@ -172,60 +186,60 @@
 .cta {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
-  color: #001F36; /* make CTA same color as text */
+  color: #001F36;
   margin-bottom: 8px;
 }
 
+/* CTA as button but looks like your text */
 .cta {
   margin: 20px 0 0;
   font-weight: 600;
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
 }
 
 /* ===== RESPONSIVE: 1024px ===== */
 @media (max-width: 1024px) {
-    .featured-section{
+  .featured-section{
     padding: 40px;
-    }
+  }
 
-  /* LEFT IMAGE */
   .featured-left .featured-img-left {
-    flex: 0 0 30%; /* smaller left image */
-    width: 50%; /* allow flex to control width */
+    flex: 0 0 30%;
+    width: 50%;
   }
 
-  /* RIGHT IMAGE */
   .featured-right .featured-img-right {
-    flex: 0 0 35%; /* smaller right image */
-    width: auto; /* allow flex to control width */
+    flex: 0 0 35%;
+    width: auto;
   }
-} 
+}
 
-
-/* ===== RESPONSIVE: 425px AND BELOW ===== */
+/* ===== RESPONSIVE: 640px AND BELOW ===== */
 @media (max-width: 640px) {
   .featured-section{
     padding-right: 20px;
     padding-left: 20px;
   }
+
   .featured-grid {
     flex-direction: column;
     gap: 20px;
   }
 
-  /* LEFT + RIGHT: use column flex so image first, then text.
-     Align content to the left so stacked texts sit to the left of the container */
   .featured-left,
   .featured-right {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* left-align stacked content */
+    align-items: flex-start;
     overflow: visible;
     border-radius: 16px;
     background: transparent;
   }
-  
-  /* IMAGES: don't force a fixed height or overflow */
+
   .featured-left .featured-img-left,
   .featured-right .featured-img-right {
     width: 100%;
@@ -237,35 +251,26 @@
     flex: 0 0 auto;
   }
 
-  /* conferences image size on phones */
   .featured-left .featured-img-left {
     max-height: 220px;
-    height: auto;
-    object-fit: cover;
   }
 
-  /* second image slightly smaller on phones */
   .featured-right .featured-img-right {
     max-height: 180px;
-    height: auto;
-    object-fit: cover;
-    display: block;
   }
 
-  /* TEXT BLOCKS: left-aligned and padded so text sits at left edge */
   .text-bg-left,
   .text-bg-right {
     width: 100%;
     display: block;
-    padding: 12px 20px;        /* extra left padding for clearer left alignment */
+    padding: 12px 20px;
     box-sizing: border-box;
     border-radius: 0 0 16px 16px;
-    text-align: left;          /* stack text to the left */
+    text-align: left;
     background-color: #F2F2F2;
     overflow: visible;
   }
 
-  /* Make sure titles and following content have space and are visible */
   .big-title {
     font-size: 1.2rem;
     margin-bottom: 8px;
@@ -279,7 +284,7 @@
     font-size: 0.9rem;
     margin-bottom: 8px;
     display: block;
-    text-align: left; /* ensure paragraph/cta text also left-aligned */
+    text-align: left;
   }
 
   .cta {
