@@ -6,7 +6,6 @@
 
     <!-- Form -->
     <form class="login-form" @submit.prevent="register">
-
       <!-- Name -->
       <div class="input-group">
         <label for="name" class="input-label">Full Name</label>
@@ -30,7 +29,6 @@
           <option value="participant">Participant</option>
           <option value="guest_speaker">Guest / Speaker</option>
           <option value="workshop_facilitator">Workshop Facilitator</option>
-
         </select>
       </div>
 
@@ -64,22 +62,22 @@
         ></i>
       </div>
 
-      <!-- Error message -->
+      <!-- Error / Success -->
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
 
-
       <!-- Submit button -->
       <button type="submit" class="login-btn">Sign up</button>
-
     </form>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import api from '@/api/axios.js'
-import auth from '@/stores/auth'
+
+const router = useRouter()
 
 const successMessage = ref('')
 const errorMessage = ref('')
@@ -102,7 +100,7 @@ const register = async () => {
   }
 
   try {
-    const response = await api.post('/register', {
+    await api.post('/register', {
       name: name.value,
       email: email.value,
       role: role.value,
@@ -110,11 +108,8 @@ const register = async () => {
       password_confirmation: confirmPassword.value
     })
 
-    const token = response.data.token
-    const user = response.data.user
-
-    auth.login(token, user)
-
+    // ✅ Do NOT log the user in here.
+    // ✅ Just show message and send them to login.
     successMessage.value = 'Registration successful! You can now log in.'
 
     name.value = ''
@@ -123,6 +118,10 @@ const register = async () => {
     password.value = ''
     confirmPassword.value = ''
 
+    // optional: redirect to login after a short moment
+    setTimeout(() => {
+      router.push('/auth/login')
+    }, 800)
   } catch (error) {
     console.error('Register failed:', error)
     errorMessage.value =
@@ -130,9 +129,6 @@ const register = async () => {
   }
 }
 </script>
-
-
-
 
 
 <style scoped>
