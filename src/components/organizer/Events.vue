@@ -4,9 +4,11 @@
       <h2 class="section-title">My Events</h2>
 
       <div v-if="loading" class="loading">Loading events...</div>
+
       <div v-else-if="events.length === 0" class="empty-state">
         You have not created any events yet.
       </div>
+
       <div v-else class="events-grid">
         <div v-for="event in events" :key="event.id" class="event-card">
           <h3 class="event-title">{{ event.title }}</h3>
@@ -15,7 +17,22 @@
             Date: {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
           </p>
           <p class="event-type">Type: {{ capitalize(event.type) }}</p>
-          <a class="event-details" @click="openEventDetails(event)">Details</a>
+
+          <!-- actions row -->
+          <div class="event-actions">
+            <a class="event-details" @click="openEventDetails(event)">Details</a>
+
+            <span class="divider">•</span>
+
+            <button
+              class="event-delete"
+              :disabled="deletingId === event.id"
+              @click="deleteEvent(event.id)"
+              title="Delete this event"
+            >
+              {{ deletingId === event.id ? 'Deleting…' : 'Delete' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -31,10 +48,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import EventDetails from './EventDetails.vue'
-import api from '@/api/userAxios' // axios instance with token interceptor
+import api from '@/api/userAxios'
 
 const events = ref([])
 const loading = ref(true)
+const deletingId = ref(null)
+
 const isModalOpen = ref(false)
 const selectedEvent = ref(null)
 const currentUser = ref(null)
@@ -44,23 +63,67 @@ const fetchMyEvents = async () => {
   try {
     // Fetch current logged-in organizer
     const userRes = await api.get('/me')
-    currentUser.value = userRes.data.data
-    console.log('Current logged-in user:', currentUser.value)
+    currentUser.value = userRes.data?.data
+    console.log('[Organizer/Events] /me response:', userRes.data)
 
-    // Fetch all events (backend returns all)
+    // Fetch all events then filter by organizer_id
     const eventsRes = await api.get('/events')
-    console.log('All events from backend:', eventsRes.data.data)
+    console.log('[Organizer/Events] /events response:', eventsRes.data)
 
-    // Filter only events created by this organizer
-    events.value = eventsRes.data.data.filter(
-      e => e.organizer_id === currentUser.value.user.id
-    )
-    console.log('Filtered events for this organizer:', events.value)
+    const allEvents = eventsRes.data?.data || []
+    const organizerId = currentUser.value?.user?.id
+
+    if (!organizerId) {
+      console.warn('[Organizer/Events] organizerId missing from /me response:', currentUser.value)
+      events.value = []
+      return
+    }
+
+    events.value = allEvents.filter(e => e.organizer_id === organizerId)
+    console.log('[Organizer/Events] filtered events:', events.value)
   } catch (err) {
-    console.error(err)
+    console.error('[Organizer/Events] fetchMyEvents error:', err)
     events.value = []
   } finally {
     loading.value = false
+  }
+}
+
+const deleteEvent = async (eventId) => {
+  const ok = window.confirm('Are you sure you want to delete this event? This cannot be undone.')
+  if (!ok) return
+
+  deletingId.value = eventId
+  try {
+    console.log('[Organizer/Events] DELETE /events/' + eventId)
+
+    const res = await api.delete(`/events/${eventId}`)
+    console.log('[Organizer/Events] delete response:', res.data)
+
+    if (res.data?.success) {
+      // remove from UI
+      events.value = events.value.filter(e => e.id !== eventId)
+
+      // if modal is open for deleted event, close it
+      if (selectedEvent.value?.id === eventId) closeEventDetails()
+
+      alert('Event deleted successfully.')
+    } else {
+      alert(res.data?.message || 'Failed to delete event.')
+    }
+  } catch (err) {
+    console.error('[Organizer/Events] deleteEvent error:', err)
+
+    const status = err.response?.status
+    const msg =
+      err.response?.data?.message ||
+      (status === 403 ? 'You are not allowed to delete this event.' :
+      status === 401 ? 'Authentication error. Please login again.' :
+      'An error occurred while deleting the event.')
+
+    alert(msg)
+  } finally {
+    deletingId.value = null
   }
 }
 
@@ -75,15 +138,15 @@ const closeEventDetails = () => {
 }
 
 const formatDate = (dateStr) => {
+  if (!dateStr) return ''
   const date = new Date(dateStr)
-  return date.toLocaleDateString()
+  return isNaN(date.getTime()) ? '' : date.toLocaleDateString()
 }
 
-const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+const capitalize = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : '')
 
 onMounted(fetchMyEvents)
 </script>
-
 
 <style scoped>
 .events-section {
@@ -147,12 +210,18 @@ onMounted(fetchMyEvents)
   line-height: 1.5;
 }
 
+.event-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 .event-details {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   color: #3B82F6;
   text-decoration: none;
-  margin-top: 8px;
   transition: color 0.3s;
 }
 
@@ -160,6 +229,34 @@ onMounted(fetchMyEvents)
   color: #0052a3;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.divider {
+  color: #999;
+  font-size: 12px;
+}
+
+.event-delete {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #EF4444; /* red */
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.event-delete:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+.event-delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  text-decoration: none;
 }
 
 /* Tablet */
