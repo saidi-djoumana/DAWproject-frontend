@@ -21,7 +21,10 @@
         </div>
       </div>
 
-      <button class="details-btn">View Details →</button>
+      <router-link to="/events/details" class="details-btn">
+                    View Details →
+      </router-link>
+
     </div>
   </div>
 </template>
@@ -122,16 +125,25 @@ defineProps({
   background: none;
   border: none;
   padding: 0;
+
   font-size: 15px;
   font-weight: 500;
+  font-family: Inter, sans-serif;
+
   color: #000;
   cursor: pointer;
-  font-family: Inter, sans-serif;
+
+  /* router-link / anchor fixes */
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .details-btn:hover {
   text-decoration: underline;
 }
+
 
 @media (max-width: 420px) {
   .event-card {

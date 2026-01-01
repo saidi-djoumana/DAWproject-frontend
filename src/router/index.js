@@ -11,6 +11,7 @@ import Evaluation from '@/pages/Evaluation.vue'
 import Admin from '@/pages/Admin.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
+import EventDetails from '@/pages/EventDetails.vue'
 
 const routes = [
   {
@@ -20,6 +21,7 @@ const routes = [
       // ✅ PUBLIC
       { path: '', component: Home },
       { path: 'events', component: Events },
+      { path: 'events/details', component: EventDetails },
 
       // 🔐 USER AUTH REQUIRED
       { path: 'organizer', component: Organizer, meta: { requiresAuth: true } },
