@@ -19,7 +19,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import api from '@/api/axios'
+import api from '@/api/userAxios'
 import EventCard from './EventCard.vue'
 import EventFilters from './EventsFilters.vue'
 import defaultImage from '@/assets/default-event.png'
