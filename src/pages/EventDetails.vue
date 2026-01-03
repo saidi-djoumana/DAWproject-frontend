@@ -1,6 +1,7 @@
 <template>
   <div class="page">
-    <HeroBanner />
+    <HeroBanner :eventId="eventId" />
+
 
     <div class="container">
       <!-- TOP: left event card + right scientific committee -->
@@ -55,14 +56,23 @@
 </template>
 
 <script setup>
-import HeroBanner from "@/components/eventDetails/HeroBanner.vue";
-import EventInfoCard from "@/components/eventDetails/EventInfoCard.vue";
-import PersonHighlightCard from "@/components/eventDetails/PersonHighlightCard.vue";
-import PersonCard from "@/components/eventDetails/PersonCard.vue";
-import SpeakerCard from "@/components/eventDetails/SpeakerCard.vue";
-import ProgrammeSection from "@/components/eventDetails/ProgrammeSection.vue";
-import WorkshopCard from "@/components/eventDetails/WorkshopCard.vue";
+import { computed } from "vue"
+import { useRoute } from "vue-router"
 
+import HeroBanner from "@/components/eventDetails/HeroBanner.vue"
+import EventInfoCard from "@/components/eventDetails/EventInfoCard.vue"
+import PersonHighlightCard from "@/components/eventDetails/PersonHighlightCard.vue"
+import PersonCard from "@/components/eventDetails/PersonCard.vue"
+import SpeakerCard from "@/components/eventDetails/SpeakerCard.vue"
+import ProgrammeSection from "@/components/eventDetails/ProgrammeSection.vue"
+import WorkshopCard from "@/components/eventDetails/WorkshopCard.vue"
+
+const route = useRoute()
+
+// ✅ get id from /events/:id
+const eventId = computed(() => route.params.id)
+
+// keep your dummy event data for now (no API required for banner)
 const event = {
   title: "Event",
   startDate: "March 1, 2023",
@@ -72,58 +82,26 @@ const event = {
     "Join us for an exciting event that will cover various topics in depth. This event is designed for enthusiasts and professionals alike to exchange ideas and learn from each other.",
   type: "Conference",
   topics: ["Innovation", "Technology", "Networking"],
-};
+}
 
 const scientificChair = {
   name: "Prof. Dr. John Smith",
   affiliation: "Harvard Medical University",
   specialty: "Healthcare Analytics",
   email: "john.smith@harvard.edu",
-};
+}
 
 const committeeMembers = [
-  {
-    name: "Dr. Jane Doe",
-    affiliation: "MIT",
-    specialty: "Data Science",
-    email: "jane@mit.edu",
-  },
-  {
-    name: "Dr. Ahmed Hassan",
-    affiliation: "American University of Cairo",
-    specialty: "Medical Informatics",
-    email: "ahmed@auc.edu.eg",
-  },
-  {
-    name: "Prof. Mohamed Bouramoul",
-    affiliation: "University Constantine 2",
-    specialty: "Research Methods",
-    email: "m.bouramoul@ucc2.dz",
-  },
-  {
-    name: "Dr. Fatima Al-Rashid",
-    affiliation: "King Saud University",
-    specialty: "Healthcare Systems",
-    email: "fatima@ksu.edu.sa",
-  },
-];
+  { name: "Dr. Jane Doe", affiliation: "MIT", specialty: "Data Science", email: "jane@mit.edu" },
+  { name: "Dr. Ahmed Hassan", affiliation: "American University of Cairo", specialty: "Medical Informatics", email: "ahmed@auc.edu.eg" },
+  { name: "Prof. Mohamed Bouramoul", affiliation: "University Constantine 2", specialty: "Research Methods", email: "m.bouramoul@ucc2.dz" },
+  { name: "Dr. Fatima Al-Rashid", affiliation: "King Saud University", specialty: "Healthcare Systems", email: "fatima@ksu.edu.sa" },
+]
 
 const speakers = [
-  {
-    name: "Dr. Expert Speaker 2",
-    topic: "Data Privacy in Medical Systems",
-    affiliation: "MIT Media Lab",
-    email: "expert2@mit.edu",
-    bio: '"Lorem ipsum dolor sit amet..."',
-  },
-  {
-    name: "Prof. Expert Speaker 3",
-    topic: "Future of Clinical Data Analytics",
-    affiliation: "Oxford University",
-    email: "expert3@oxford.edu",
-    bio: '"Lorem ipsum dolor sit amet..."',
-  },
-];
+  { name: "Dr. Expert Speaker 2", topic: "Data Privacy in Medical Systems", affiliation: "MIT Media Lab", email: "expert2@mit.edu", bio: '"Lorem ipsum dolor sit amet..."' },
+  { name: "Prof. Expert Speaker 3", topic: "Future of Clinical Data Analytics", affiliation: "Oxford University", email: "expert3@oxford.edu", bio: '"Lorem ipsum dolor sit amet..."' },
+]
 
 const programmeDays = [
   {
@@ -137,51 +115,19 @@ const programmeDays = [
   },
   { label: "Day 2", items: [{ time: "9:00-10:00", title: "Workshops & Panels" }] },
   { label: "Day 3", items: [{ time: "9:00-10:00", title: "Closing & Awards" }] },
-];
+]
 
 const workshops = [
-  {
-    id: 1,
-    title: "Workshop on AI for Clinical Diagnosis",
-    date: "June 15, 2025",
-    time: "15:00 - 16:30",
-    location: "Workshop Room A",
-    facilitator: "Dr. Tech Expert",
-    capacity: { used: 45, total: 50 },
-    description: '"Learn practical AI applications in clinical diagnosis..."',
-    fee: "Included in registration",
-    requirements: "None",
-  },
-  {
-    id: 2,
-    title: "Workshop on AI for Clinical Diagnosis",
-    date: "June 15, 2025",
-    time: "15:00 - 16:30",
-    location: "Workshop Room A",
-    facilitator: "Dr. Tech Expert",
-    capacity: { used: 45, total: 50 },
-    description: '"Learn practical AI applications in clinical diagnosis..."',
-    fee: "Included in registration",
-    requirements: "None",
-  },
-  {
-    id: 3,
-    title: "Workshop on AI for Clinical Diagnosis",
-    date: "June 15, 2025",
-    time: "15:00 - 16:30",
-    location: "Workshop Room A",
-    facilitator: "Dr. Tech Expert",
-    capacity: { used: 45, total: 50 },
-    description: '"Learn practical AI applications in clinical diagnosis..."',
-    fee: "Included in registration",
-    requirements: "None",
-  },
-];
+  { id: 1, title: "Workshop on AI for Clinical Diagnosis", date: "June 15, 2025", time: "15:00 - 16:30", location: "Workshop Room A", facilitator: "Dr. Tech Expert", capacity: { used: 45, total: 50 }, description: '"Learn practical AI applications in clinical diagnosis..."', fee: "Included in registration", requirements: "None" },
+  { id: 2, title: "Workshop on AI for Clinical Diagnosis", date: "June 15, 2025", time: "15:00 - 16:30", location: "Workshop Room A", facilitator: "Dr. Tech Expert", capacity: { used: 45, total: 50 }, description: '"Learn practical AI applications in clinical diagnosis..."', fee: "Included in registration", requirements: "None" },
+  { id: 3, title: "Workshop on AI for Clinical Diagnosis", date: "June 15, 2025", time: "15:00 - 16:30", location: "Workshop Room A", facilitator: "Dr. Tech Expert", capacity: { used: 45, total: 50 }, description: '"Learn practical AI applications in clinical diagnosis..."', fee: "Included in registration", requirements: "None" },
+]
 
 function onRegisterWorkshop(workshopId) {
-  console.log("Register workshop:", workshopId);
+  console.log("Register workshop:", workshopId)
 }
 </script>
+
 
 <style scoped>
 .page {

@@ -22,9 +22,10 @@
         </div>
       </div>
 
-      <router-link to="/events/details" class="details-btn">
-                    View Details →
-      </router-link>
+      <router-link :to="`/events/${event.id}`" class="details-btn">
+  View Details →
+</router-link>
+
 
     </div>
   </div>

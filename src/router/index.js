@@ -21,7 +21,9 @@ const routes = [
       // ✅ PUBLIC
       { path: '', component: Home },
       { path: 'events', component: Events },
-      { path: 'events/details', component: EventDetails },
+
+      // ✅ DETAILS must include ID
+      { path: 'events/:id', component: EventDetails },
 
       // 🔐 USER AUTH REQUIRED
       { path: 'organizer', component: Organizer, meta: { requiresAuth: true } },
@@ -30,14 +32,12 @@ const routes = [
     ]
   },
 
-  // 🔐 ADMIN ONLY
   {
     path: '/admin',
     component: Admin,
     meta: { requiresAdmin: true }
   },
 
-  // AUTH PAGES
   {
     path: '/auth',
     component: AuthLayout,
@@ -51,10 +51,19 @@ const routes = [
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // if user used back/forward, restore scroll
+    if (savedPosition) return savedPosition
+
+    // otherwise always go to top on navigation
+    return { top: 0 }
+  }
 })
+
 
 router.beforeEach((to, from, next) => {
   // USER auth

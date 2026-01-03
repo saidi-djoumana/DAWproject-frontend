@@ -1,8 +1,36 @@
 <template>
   <div class="hero">
-    <div class="placeholder">1200 × 400</div>
+    <div class="banner">
+      <img
+        :src="currentSrc"
+        alt="Event banner"
+        @error="useFallback"
+      />
+    </div>
   </div>
 </template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import defaultImage from '@/assets/default-event.png'
+
+const props = defineProps({
+  eventId: {
+    type: [String, Number],
+    required: true
+  }
+})
+
+// initial image = event image from storage
+const currentSrc = ref(
+  `http://127.0.0.1:8000/storage/events/event-${props.eventId}.jpg`
+)
+
+// if event image does not exist → use default
+const useFallback = () => {
+  currentSrc.value = defaultImage
+}
+</script>
 
 <style scoped>
 .hero {
@@ -10,23 +38,28 @@
   background: #ffffff;
   padding: 26px 0 10px;
 }
-.placeholder {
+
+.banner {
   max-width: 1120px;
   height: 260px;
   margin: 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
   background: #d9d9d9;
-  color: #9a9a9a;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-title);
-  font-size: 72px;
-  font-weight: 700;
-  letter-spacing: 1px;
 }
+
+/* image */
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* RESPONSIVE */
 @media (max-width: 980px) {
-  .placeholder {
+  .banner {
     height: 200px;
-    font-size: 44px;
     margin: 0 18px;
   }
 }
@@ -36,9 +69,8 @@
     padding: 20px 0 8px;
   }
 
-  .placeholder {
+  .banner {
     height: 180px;
-    font-size: 36px;
     margin: 0 15px;
   }
 }
@@ -48,9 +80,8 @@
     padding: 15px 0 6px;
   }
 
-  .placeholder {
+  .banner {
     height: 150px;
-    font-size: 28px;
     margin: 0 10px;
   }
 }
