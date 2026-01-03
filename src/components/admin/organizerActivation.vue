@@ -1,42 +1,14 @@
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
-import axios from 'axios';
+import { defineProps, defineEmits, ref } from 'vue'
 
 const props = defineProps({
-  organizerData: {
-    type: Object,
-    required: true
-  }
-});
+  organizerData: { type: Object, required: true },
+  userId: { type: [Number, String, null], default: null }
+})
 
-const emit = defineEmits(['close', 'confirmed']); // 'confirmed' lets parent know to refresh table
-const isLoading = ref(false);
-const errorMessage = ref('');
-
-// Approve organizer function
-const approveOrganizer = async () => {
-  try {
-    isLoading.value = true;
-    const token = localStorage.getItem('authToken');
-    const res = await axios.post(
-      `http://localhost:8000/api/admin/organizers/${props.organizerData.id}/approve`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    if (res.data.success) {
-      emit('confirmed'); // parent can remove organizer from table
-      emit('close');     // close the modal
-    } else {
-      errorMessage.value = res.data.message || 'Failed to approve organizer';
-    }
-  } catch (err) {
-    console.error(err);
-    errorMessage.value = 'Error approving organizer';
-  } finally {
-    isLoading.value = false;
-  }
-};
+const emit = defineEmits(['close', 'confirm'])
+const isLoading = ref(false)
+const errorMessage = ref('')
 </script>
 
 <template>
@@ -48,6 +20,9 @@ const approveOrganizer = async () => {
     <div class="info-section">
       <h3 class="section-title">Confirmation Message:</h3>
       <p class="message-text">Are you sure you want to approve this organizer?</p>
+      <p v-if="userId" style="margin-top:6px;color:#6B7280;font-size:13px;">
+        Approving user id: <b>{{ userId }}</b>
+      </p>
     </div>
 
     <div class="info-section">
@@ -71,10 +46,19 @@ const approveOrganizer = async () => {
     </div>
 
     <footer class="card-footer">
-      <button @click="approveOrganizer" :disabled="isLoading" class="btn-done">
-        {{ isLoading ? 'Approving...' : 'Approve' }}
+      <button
+        @click="emit('confirm')"
+        :disabled="isLoading"
+        class="btn-done"
+      >
+        Approve
       </button>
-      <button @click="$emit('close')" class="btn-done" style="margin-left:10px;background:#F87171;color:white;border:none;">
+
+      <button
+        @click="emit('close')"
+        class="btn-done"
+        style="margin-left:10px;background:#F87171;color:white;border:none;"
+      >
         Cancel
       </button>
     </footer>
@@ -82,6 +66,7 @@ const approveOrganizer = async () => {
 </template>
 
 <style scoped>
+/* keep your styles */
 .activation-card {
   background: white;
   border: 1px solid #E5E7EB;
@@ -98,34 +83,12 @@ const approveOrganizer = async () => {
   margin-bottom: 24px;
 }
 
-.info-section {
-  margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.message-text, .value {
-  font-size: 16px;
-  color: #374151;
-}
-
-.detail-row {
-  margin-bottom: 4px;
-}
-
-.label {
-  font-weight: 700;
-  margin-right: 5px;
-}
-
-.dotted-box {
-  border: 1px dotted #3B82F6;
-  padding: 1px 4px;
-}
+.info-section { margin-bottom: 20px; }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.message-text, .value { font-size: 16px; color: #374151; }
+.detail-row { margin-bottom: 4px; }
+.label { font-weight: 700; margin-right: 5px; }
+.dotted-box { border: 1px dotted #3B82F6; padding: 1px 4px; }
 
 .card-footer {
   display: flex;
@@ -143,58 +106,5 @@ const approveOrganizer = async () => {
   cursor: pointer;
 }
 
-.btn-done:hover {
-  background-color: #C1D9D9;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .activation-card {
-    width: 90%;
-    max-width: 480px;
-    padding: 30px;
-  }
-
-  .card-header h1 {
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-size: 16px;
-  }
-
-  .message-text, .value {
-    font-size: 14px;
-  }
-
-  .btn-done {
-    padding: 8px 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .activation-card {
-    width: 95%;
-    padding: 20px;
-  }
-
-  .card-header h1 {
-    font-size: 20px;
-    margin-bottom: 16px;
-  }
-
-  .section-title {
-    font-size: 14px;
-  }
-
-  .message-text, .value {
-    font-size: 13px;
-  }
-
-  .btn-done {
-    padding: 6px 20px;
-    font-size: 14px;
-  }
-}
+.btn-done:hover { background-color: #C1D9D9; }
 </style>
