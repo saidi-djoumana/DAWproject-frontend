@@ -446,4 +446,127 @@ textarea {
   color: #DC2626;
   font-size: 13px;
 }
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .sliders-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .evaluation-container {
+    padding: 15px;
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+
+  .details-card {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .details-left p {
+    font-size: 13px;
+  }
+
+  .sliders-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .slider-group label {
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+
+  .range-wrapper {
+    padding-top: 15px;
+  }
+
+  .range-value {
+    font-size: 11px;
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px;
+  }
+
+  .rec-options {
+    gap: 10px;
+  }
+
+  .btn-primary-large {
+    margin-top: 30px;
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .evaluation-container {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin: 15px 0;
+  }
+
+  .details-card {
+    padding: 15px;
+  }
+
+  .details-left p {
+    font-size: 12px;
+  }
+
+  .abstract-box p {
+    font-size: 11px;
+  }
+
+  .btn-read-more {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .slider-group label {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .range-value {
+    font-size: 10px;
+  }
+
+  textarea {
+    height: 120px;
+    padding: 10px;
+  }
+
+  .rec-item span {
+    font-size: 14px;
+  }
+
+  .btn-secondary {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .btn-primary-large {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
+}
 </style>

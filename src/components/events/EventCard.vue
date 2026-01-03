@@ -1,7 +1,8 @@
 <template>
   <div class="event-card">
     <div class="event-image">
-      <img :src="event.image" alt="Event image" />
+      <img :src="event.image" alt="Event image" @error="onImgError" />
+
     </div>
 
     <div class="event-content">
@@ -30,17 +31,16 @@
 </template>
 
 <script setup>
-defineProps({
-  event: {
-    type: Object,
-    required: true
-  }
+const props = defineProps({
+  event: { type: Object, required: true }
 })
+
+const onImgError = (e) => {
+  e.target.src = props.event.fallbackImage
+}
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600&display=swap");
-
 .event-card {
   display: flex;
   flex-direction: column;
@@ -133,7 +133,6 @@ defineProps({
   color: #000;
   cursor: pointer;
 
-  /* router-link / anchor fixes */
   text-decoration: none;
   display: inline-flex;
   align-items: center;

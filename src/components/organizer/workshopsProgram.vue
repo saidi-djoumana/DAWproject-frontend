@@ -126,8 +126,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 /* Main Background */
 .container {
   background-color: #F3F4F6;
@@ -228,5 +226,110 @@ onMounted(() => {
 .btn-primary:hover {
   text-decoration: underline;
   opacity: 0.8;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .program-header h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-main {
+    padding-right: 0;
+  }
+
+  .title-bold {
+    font-size: 14px;
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  .btn-primary {
+    font-size: 13px;
+  }
+
+  .workshop-body {
+    margin-top: 8px;
+  }
+
+  .animator-info {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .details-container {
+    padding: 12px;
+  }
+
+  .detail-row {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .program-header h1 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .card-header {
+    gap: 8px;
+  }
+
+  .title-bold {
+    font-size: 13px;
+  }
+
+  .actions {
+    gap: 6px;
+  }
+
+  .btn-primary {
+    font-size: 12px;
+  }
+
+  .workshop-body {
+    margin-top: 6px;
+  }
+
+  .animator-info {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .details-container {
+    padding: 10px;
+  }
+
+  .detail-row {
+    font-size: 12px;
+  }
 }
 </style>

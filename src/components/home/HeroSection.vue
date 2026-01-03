@@ -13,7 +13,7 @@
           Discover, create, and collaborate on health science events worldwide.
         </p>
         <div class="hero-buttons">
-          <router-link to="/create-event" class="btn-create">Create Event</router-link>
+          <router-link to="/organizer" class="btn-create">Create Event</router-link>
           <router-link to="/events" class="btn-explore">Explore</router-link>
         </div>
       </div>

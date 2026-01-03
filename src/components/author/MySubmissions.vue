@@ -234,4 +234,65 @@ h1 {
 .btn-delete:hover {
   color: #b91c1c;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .submissions-table {
+    min-width: 500px;
+  }
+
+  .submissions-table th,
+  .submissions-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .btn-action {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .submissions-table th,
+  .submissions-table td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-action {
+    font-size: 0.75rem;
+  }
+}
 </style>

@@ -308,4 +308,136 @@ onMounted(() => {
 .btn-primary.delete:hover {
   text-decoration: underline;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .program-header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .program-header h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-main {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .title-bold {
+    font-size: 14px;
+  }
+
+  .meta-text {
+    font-size: 13px;
+  }
+
+  .actions {
+    gap: 6px;
+  }
+
+  .btn-primary {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .session-body {
+    margin-top: 10px;
+  }
+
+  .chair-info {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .presentations-container {
+    padding: 10px 12px;
+  }
+
+  .presentation-row {
+    font-size: 13px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .program-header h1 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .program-header h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .card-header {
+    gap: 8px;
+  }
+
+  .header-main {
+    gap: 6px;
+  }
+
+  .title-bold {
+    font-size: 13px;
+  }
+
+  .meta-text {
+    font-size: 12px;
+  }
+
+  .actions {
+    gap: 4px;
+  }
+
+  .btn-primary {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .session-body {
+    margin-top: 8px;
+  }
+
+  .chair-info {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .presentations-container {
+    padding: 8px 10px;
+  }
+
+  .presentation-row {
+    font-size: 12px;
+    gap: 4px;
+  }
+}
 </style>

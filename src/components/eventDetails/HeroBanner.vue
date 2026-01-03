@@ -30,4 +30,28 @@
     margin: 0 18px;
   }
 }
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 20px 0 8px;
+  }
+
+  .placeholder {
+    height: 180px;
+    font-size: 36px;
+    margin: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 15px 0 6px;
+  }
+
+  .placeholder {
+    height: 150px;
+    font-size: 28px;
+    margin: 0 10px;
+  }
+}
 </style>

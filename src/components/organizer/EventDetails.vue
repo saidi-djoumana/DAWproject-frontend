@@ -161,4 +161,59 @@ const closeModal = () => {
   color: #666;
   font-size: 14px;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-container {
+    max-width: 100%;
+    max-height: 95vh;
+    padding: 15px;
+  }
+
+  .close-button {
+    width: 35px;
+    height: 35px;
+    top: 15px;
+  }
+
+  .event-details-wrapper {
+    gap: 18px;
+  }
+
+  .empty-state {
+    padding: 30px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 5px;
+  }
+
+  .modal-container {
+    max-width: 100%;
+    max-height: 98vh;
+    padding: 10px;
+  }
+
+  .close-button {
+    width: 30px;
+    height: 30px;
+    top: 10px;
+  }
+
+  .event-details-wrapper {
+    gap: 12px;
+  }
+
+  .empty-state {
+    padding: 20px;
+    font-size: 12px;
+  }
+}
 </style>

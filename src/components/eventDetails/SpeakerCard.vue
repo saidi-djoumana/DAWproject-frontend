@@ -69,4 +69,65 @@ defineProps({
   font-size: 13px;
   color: #4b5563;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 15px;
+  }
+
+  .image {
+    height: 150px;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .name {
+    font-size: 16px;
+  }
+
+  .row {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .bioLabel {
+    margin-top: 12px;
+    font-size: 12px;
+  }
+
+  .bio {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+  }
+
+  .image {
+    height: 120px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .row {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .bioLabel {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+
+  .bio {
+    font-size: 11px;
+  }
+}
 </style>

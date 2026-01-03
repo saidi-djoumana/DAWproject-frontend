@@ -124,4 +124,80 @@ const speakers = ref([
   color: #6B7280; /* Muted gray for role */
   margin: 0;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .card {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .speakers-list {
+    gap: 18px;
+  }
+
+  .speaker-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .avatar-container {
+    width: 80px;
+    height: 80px;
+  }
+
+  .speaker-name {
+    font-size: 16px;
+  }
+
+  .speaker-role {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .section-header h1 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .speakers-list {
+    gap: 12px;
+  }
+
+  .speaker-item {
+    gap: 10px;
+  }
+
+  .avatar-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .speaker-name {
+    font-size: 15px;
+  }
+
+  .speaker-role {
+    font-size: 13px;
+  }
+}
 </style>

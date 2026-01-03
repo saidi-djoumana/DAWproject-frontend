@@ -143,4 +143,60 @@ textarea { height: 120px; resize: vertical; }
     grid-template-columns: 1fr;
   }
 }
+
+/* Additional responsive styles */
+@media (max-width: 768px) {
+  .event-form-section {
+    padding: 30px;
+  }
+
+  .form-wrapper {
+    gap: 1.25rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  input, textarea, select {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  .two-columns {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-form-section {
+    padding: 20px;
+  }
+
+  .form-wrapper {
+    gap: 1rem;
+  }
+
+  label {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+  }
+
+  input, textarea, select {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+
+  textarea {
+    height: 80px;
+  }
+
+  .two-columns {
+    gap: 0.5rem;
+  }
+}
 </style>

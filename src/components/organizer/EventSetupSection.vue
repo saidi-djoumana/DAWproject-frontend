@@ -149,4 +149,41 @@ const createEvent = async () => {
     gap: 24px;
   }
 }
+
+/* Additional responsive styles */
+@media (max-width: 768px) {
+  .event-setup {
+    padding: 40px 0;
+  }
+
+  .event-container {
+    width: 90%;
+    gap: 30px;
+    padding-bottom: 40px;
+  }
+
+  .create-event-button {
+    margin-left: 30px;
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-setup {
+    padding: 30px 0;
+  }
+
+  .event-container {
+    width: 95%;
+    gap: 20px;
+    padding-bottom: 30px;
+  }
+
+  .create-event-button {
+    margin-left: 20px;
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+}
 </style>

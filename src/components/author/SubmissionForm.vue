@@ -296,6 +296,16 @@ const resetForm = () => {
   .form-title { font-size: 24px; }
 }
 
+@media (max-width: 768px) {
+  .submission-form-container { padding: 20px 15px; }
+  .form-wrapper { padding: 25px 30px; max-width: 100%; }
+  .form-title { font-size: 22px; margin-bottom: 30px; }
+  .form-group { margin-bottom: 24px; }
+  .form-label { font-size: 14px; }
+  .form-input, .form-textarea { padding: 10px 14px; font-size: 13px; }
+  .submit-button { font-size: 15px; padding: 14px; }
+}
+
 @media (max-width: 600px) {
   .submission-form-container { padding: 20px 10px; }
   .form-wrapper { padding: 24px 20px; }
@@ -303,5 +313,15 @@ const resetForm = () => {
   .form-group { margin-bottom: 24px; }
   .form-label { font-size: 14px; }
   .submit-button { font-size: 15px; padding: 14px; }
+}
+
+@media (max-width: 480px) {
+  .submission-form-container { padding: 15px 5px; }
+  .form-wrapper { padding: 20px 15px; }
+  .form-title { font-size: 20px; margin-bottom: 25px; }
+  .form-group { margin-bottom: 20px; }
+  .form-label { font-size: 13px; margin-bottom: 10px; }
+  .form-input, .form-textarea { padding: 8px 12px; font-size: 12px; }
+  .submit-button { font-size: 14px; padding: 12px; }
 }
 </style>

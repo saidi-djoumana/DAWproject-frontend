@@ -62,4 +62,45 @@ defineProps({
   color: #374151;
   margin-top: 4px;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 12px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 10px;
+  }
+
+  .name {
+    font-size: 16px;
+  }
+
+  .line, .email {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 10px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 9px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .line, .email {
+    font-size: 11px;
+  }
+}
 </style>

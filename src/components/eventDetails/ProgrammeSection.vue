@@ -114,4 +114,88 @@ const activeIndex = ref(0);
   color: #111827;
   margin-top: 2px;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 15px;
+    min-height: 300px;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .tabs {
+    gap: 8px;
+  }
+
+  .tab {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .timeline {
+    padding-left: 15px;
+  }
+
+  .rail {
+    left: 6px;
+  }
+
+  .items {
+    gap: 8px;
+  }
+
+  .time {
+    font-size: 11px;
+  }
+
+  .text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+    min-height: 280px;
+  }
+
+  .title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tab {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  .timeline {
+    padding-left: 12px;
+  }
+
+  .rail {
+    left: 5px;
+  }
+
+  .items {
+    gap: 6px;
+  }
+
+  .time {
+    font-size: 10px;
+  }
+
+  .text {
+    font-size: 11px;
+  }
+}
 </style>

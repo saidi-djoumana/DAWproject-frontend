@@ -100,4 +100,40 @@ watch(
 .type-select {
   width: 200px;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .event-filters {
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+
+  .search-input {
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .type-select {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .search-input {
+    flex: none;
+    width: 100%;
+    max-width: none;
+  }
+
+  .type-select {
+    width: 100%;
+  }
+}
 </style>

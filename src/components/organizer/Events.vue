@@ -284,4 +284,97 @@ onMounted(fetchMyEvents)
     margin-bottom: 24px;
   }
 }
+
+/* Additional responsive styles */
+@media (max-width: 768px) {
+  .events-section {
+    padding: 30px 0;
+  }
+
+  .e-container {
+    width: 95%;
+  }
+
+  .section-title {
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+
+  .events-grid {
+    gap: 20px;
+  }
+
+  .event-card {
+    padding: 20px;
+  }
+
+  .event-title {
+    font-size: 18px;
+  }
+
+  .event-description,
+  .event-date,
+  .event-type {
+    font-size: 13px;
+  }
+
+  .event-actions {
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .event-details,
+  .event-delete {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .events-section {
+    padding: 20px 0;
+  }
+
+  .e-container {
+    width: 98%;
+  }
+
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .events-grid {
+    gap: 16px;
+  }
+
+  .event-card {
+    padding: 16px;
+  }
+
+  .event-title {
+    font-size: 16px;
+  }
+
+  .event-description,
+  .event-date,
+  .event-type {
+    font-size: 12px;
+  }
+
+  .event-actions {
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .event-details,
+  .event-delete {
+    font-size: 12px;
+  }
+
+  .loading,
+  .empty-state {
+    padding: 30px;
+    font-size: 14px;
+  }
+}
 </style>

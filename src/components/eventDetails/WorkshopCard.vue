@@ -147,4 +147,115 @@ const percent = computed(() => {
 .btn:hover {
   filter: brightness(0.98);
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 15px;
+  }
+
+  .titleRow {
+    gap: 8px;
+  }
+
+  .cap {
+    font-size: 14px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .meta {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .capWrap {
+    grid-template-columns: 60px 1fr 50px;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .capLabel {
+    font-size: 11px;
+  }
+
+  .capValue {
+    font-size: 11px;
+  }
+
+  .block {
+    margin-top: 8px;
+  }
+
+  .label {
+    font-size: 11px;
+  }
+
+  .value {
+    font-size: 12px;
+  }
+
+  .btn {
+    margin-top: 14px;
+    padding: 8px 16px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+  }
+
+  .titleRow {
+    gap: 6px;
+  }
+
+  .cap {
+    font-size: 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .meta {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .capWrap {
+    grid-template-columns: 50px 1fr 40px;
+    gap: 6px;
+    margin: 8px 0;
+  }
+
+  .capLabel {
+    font-size: 10px;
+  }
+
+  .capValue {
+    font-size: 10px;
+  }
+
+  .block {
+    margin-top: 6px;
+  }
+
+  .label {
+    font-size: 10px;
+  }
+
+  .value {
+    font-size: 11px;
+  }
+
+  .btn {
+    margin-top: 12px;
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+}
 </style>

@@ -80,4 +80,73 @@ defineProps({
   color: #374151;
   line-height: 1.5;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 15px 12px;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .meta .row {
+    font-size: 12px;
+    margin: 5px 0;
+  }
+
+  .block {
+    margin-top: 12px;
+  }
+
+  .label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .descBox {
+    padding: 12px 10px;
+    font-size: 12px;
+  }
+
+  .value {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px 10px;
+  }
+
+  .title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .meta .row {
+    font-size: 11px;
+    margin: 4px 0;
+  }
+
+  .block {
+    margin-top: 10px;
+  }
+
+  .label {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .descBox {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+
+  .value {
+    font-size: 11px;
+  }
+}
 </style>

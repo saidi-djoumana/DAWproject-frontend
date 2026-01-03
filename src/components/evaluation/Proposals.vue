@@ -179,4 +179,58 @@ defineExpose({ fetchData })
 .btn-evaluate:hover {
   text-decoration: underline;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .proposal-card {
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+
+  .info-row {
+    font-size: 13px;
+  }
+
+  .btn-evaluate {
+    font-size: 13px;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .section-header h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .proposal-card {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  .info-row {
+    font-size: 12px;
+  }
+
+  .btn-evaluate {
+    font-size: 12px;
+    padding: 2px 4px;
+  }
+}
 </style>

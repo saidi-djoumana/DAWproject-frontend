@@ -391,4 +391,180 @@ input:focus { outline: none; border-color: #0C4A4A; }
   font-size: 13px;
   color: #000;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .form-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .form-row {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .form-label {
+    min-width: 100px;
+    font-size: 13px;
+  }
+
+  .form-group {
+    gap: 6px;
+  }
+
+  input[type="text"] {
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+
+  .input-large {
+    width: 250px;
+  }
+
+  .input-medium {
+    width: 150px;
+  }
+
+  .input-small {
+    width: 140px;
+  }
+
+  .input-tiny {
+    width: 80px;
+  }
+
+  .input-datetime {
+    width: 140px;
+  }
+
+  .button-row {
+    margin-top: 12px;
+  }
+
+  .btn-primary {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .submission-row {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  .submission-info {
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+
+  .submission-fields {
+    gap: 8px;
+  }
+
+  .field-group {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .form-section {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .form-row {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .form-label {
+    min-width: 80px;
+    font-size: 12px;
+  }
+
+  .form-group {
+    gap: 4px;
+  }
+
+  input[type="text"] {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .input-large {
+    width: 200px;
+  }
+
+  .input-medium {
+    width: 120px;
+  }
+
+  .input-small {
+    width: 110px;
+  }
+
+  .input-tiny {
+    width: 60px;
+  }
+
+  .input-datetime {
+    width: 110px;
+  }
+
+  .button-row {
+    margin-top: 10px;
+  }
+
+  .btn-primary {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .submission-row {
+    padding: 8px;
+    margin-bottom: 6px;
+  }
+
+  .submission-info {
+    gap: 3px;
+    margin-bottom: 6px;
+  }
+
+  .submission-fields {
+    gap: 6px;
+  }
+
+  .field-group {
+    font-size: 11px;
+  }
+}
 </style>
