@@ -1,9 +1,7 @@
-<!-- src/components/evaluation/EvaluationForm.vue -->
 <script setup>
 import { ref, computed } from 'vue'
 import userApi from '@/api/userAxios'
 
-/* receive proposal/submission from parent */
 const props = defineProps({
   proposal: {
     type: Object,
@@ -11,55 +9,49 @@ const props = defineProps({
   }
 })
 
-/* allow parent to close the form */
 const emit = defineEmits(['close', 'submitted'])
 
-/* State for the form */
 const evaluation = ref({
   relevance: 5,
   scientificQuality: 5,
   originality: 5,
   comments: '',
-  recommendation: null
+  recommendation: null // accept | reject | revision
 })
 
-/* UI state */
 const isSubmitting = ref(false)
-const submitError = ref(null)
 const isDownloading = ref(false)
+const submitError = ref(null)
 
-/* Abstract toggle */
 const isAbstractExpanded = ref(false)
 
-/* Reactive proposal details (updates when props.proposal changes) */
 const proposalDetails = computed(() => ({
-  title: props.proposal?.title ?? props.proposal?.paper_title ?? '—',
+  title: props.proposal?.title ?? '—',
   authors: Array.isArray(props.proposal?.authors)
     ? props.proposal.authors.join(', ')
-    : (props.proposal?.authors ?? props.proposal?.user?.name ?? '—'),
+    : (props.proposal?.authors ?? props.proposal?.author?.name ?? props.proposal?.user?.name ?? '—'),
   keywords: Array.isArray(props.proposal?.keywords)
     ? props.proposal.keywords.join(', ')
     : (props.proposal?.keywords ?? '—'),
   presentationType:
+    props.proposal?.type ??
     props.proposal?.presentationType ??
     props.proposal?.presentation_type ??
-    props.proposal?.type ??
     '—'
 }))
 
-/* Use author's abstract (stored in submissions.abstract) */
 const abstractText = computed(() => props.proposal?.abstract ?? '—')
 
 const shortAbstract = computed(() => {
-  const text = abstractText.value || ''
-  if (text === '—') return '—'
+  const t = abstractText.value || ''
+  if (t === '—') return '—'
   const max = 220
-  return text.length > max ? text.slice(0, max).trimEnd() + '...' : text
+  return t.length > max ? t.slice(0, max).trimEnd() + '...' : t
 })
 
 const hasPdf = computed(() => !!props.proposal?.pdf_file)
 
-const setRecommendation = (type) => {
+function setRecommendation(type) {
   evaluation.value.recommendation = type
 }
 
@@ -69,13 +61,12 @@ function toggleAbstract() {
 
 async function downloadPdf() {
   submitError.value = null
-
   const submissionId = props.proposal?.id
+
   if (!submissionId) {
     submitError.value = 'Missing submission id.'
     return
   }
-
   if (!hasPdf.value) {
     submitError.value = 'No PDF file uploaded for this submission.'
     return
@@ -99,12 +90,21 @@ async function downloadPdf() {
 
     window.URL.revokeObjectURL(url)
   } catch (e) {
-    const data = e?.response?.data
     submitError.value =
-      data?.message || e?.message || 'Failed to download PDF.'
+      e?.response?.data?.message || e?.message || 'Failed to download PDF.'
   } finally {
     isDownloading.value = false
   }
+}
+
+/**
+ * recommendation: accept | reject | revision
+ * status endpoint expects: accepted | rejected | revision
+ */
+function mapRecommendationToStatus(rec) {
+  if (rec === 'accept') return 'accepted'
+  if (rec === 'reject') return 'rejected'
+  return 'revision'
 }
 
 async function submitEvaluation() {
@@ -124,12 +124,19 @@ async function submitEvaluation() {
 
   isSubmitting.value = true
   try {
+    // ✅ 1) Save evaluation (scientific committee endpoint)
     await userApi.post(`/submissions/${submissionId}/evaluate`, {
       relevance_score: evaluation.value.relevance,
       scientific_quality_score: evaluation.value.scientificQuality,
       originality_score: evaluation.value.originality,
       comments: evaluation.value.comments,
       recommendation: evaluation.value.recommendation // accept | reject | revision
+    })
+
+    // ✅ 2) Update submission status based on evaluator decision
+    await userApi.post(`/submissions/${submissionId}/status`, {
+      status: mapRecommendationToStatus(evaluation.value.recommendation)
+      // admin_notes is optional in backend, so we can omit it
     })
 
     emit('submitted')
@@ -150,6 +157,7 @@ async function submitEvaluation() {
   }
 }
 </script>
+
 
 <template>
   <div class="evaluation-container">
@@ -178,9 +186,7 @@ async function submitEvaluation() {
 
         <div class="abstract-box">
           <span class="label">Abstract (Resume):</span>
-          <p>
-            {{ isAbstractExpanded ? abstractText : shortAbstract }}
-          </p>
+          <p>{{ isAbstractExpanded ? abstractText : shortAbstract }}</p>
 
           <button
             v-if="abstractText && abstractText !== '—' && abstractText.length > 220"

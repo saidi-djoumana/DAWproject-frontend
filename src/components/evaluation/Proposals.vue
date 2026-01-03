@@ -26,24 +26,14 @@ async function fetchData() {
   error.value = null
 
   try {
-    // 1) Fetch all submissions
-    const resSubs = await userApi.get('/submissions')
-    const allSubmissions = extractArray(resSubs.data)
+    // Fetch all submissions
+    const res = await userApi.get('/submissions')
+    const allSubmissions = extractArray(res.data)
 
-    // 2) Fetch my evaluations (assigned/created evaluations for this user)
-    const resEvals = await userApi.get('/evaluations/my-assigned')
-    const evaluations = extractArray(resEvals.data)
-
-    // 3) Build a set of completed evaluation submission IDs
-    const completedIds = new Set(
-      evaluations
-        .filter((e) => e?.is_completed)
-        .map((e) => e?.submission_id)
-        .filter((id) => id != null)
+    // ✅ Show only pending submissions (global rule)
+    submissions.value = allSubmissions.filter(
+      (s) => (s?.status ?? 'pending') === 'pending'
     )
-
-    // 4) Show only submissions NOT yet evaluated by current user
-    submissions.value = allSubmissions.filter((s) => !completedIds.has(s?.id))
   } catch (e) {
     error.value =
       e?.response?.data?.message ||
@@ -60,9 +50,10 @@ const handleEvaluate = (submission) => {
 
 onMounted(fetchData)
 
-// ✅ expose refresh to parent (Evaluation.vue) so after submit it can refresh and hide evaluated submission
+// ✅ expose refresh to parent (Evaluation.vue)
 defineExpose({ fetchData })
 </script>
+
 
 <template>
   <div class="container">
