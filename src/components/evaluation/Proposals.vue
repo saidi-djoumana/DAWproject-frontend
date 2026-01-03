@@ -1,68 +1,115 @@
+<!-- src/components/evaluation/Proposals.vue -->
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue'
+import userApi from '@/api/userAxios'
 
-const emit = defineEmits(['evaluate']);
+const emit = defineEmits(['evaluate'])
 
-const assignedProposals = ref([
-  {
-    title: 'Example Title',
-    authors: 'Example Authors',
-    event: 'Name of the event that the proposal was submitted for',
-    deadline: 'DD/MM/YYYY 7:00PM'
-  },
-  {
-    title: 'Example Title',
-    authors: 'Example Authors',
-    event: 'Name of the event that the proposal was submitted for',
-    deadline: 'DD/MM/YYYY 7:00PM'
-  },
-  {
-    title: 'Example Title',
-    authors: 'Example Authors',
-    event: 'Name of the event that the proposal was submitted for',
-    deadline: 'DD/MM/YYYY 7:00PM'
-  },
-  {
-    title: 'Example Title',
-    authors: 'Example Authors',
-    event: 'Name of the event that the proposal was submitted for',
-    deadline: 'DD/MM/YYYY 7:00PM'
+const submissions = ref([])
+const loading = ref(false)
+const error = ref(null)
+
+/**
+ * Extract array safely from different backend response shapes
+ */
+function extractArray(payload) {
+  return Array.isArray(payload) ? payload :
+    Array.isArray(payload?.data) ? payload.data :
+    Array.isArray(payload?.data?.data) ? payload.data.data : // paginated
+    Array.isArray(payload?.data?.submissions) ? payload.data.submissions :
+    Array.isArray(payload?.submissions) ? payload.submissions :
+    []
+}
+
+async function fetchData() {
+  loading.value = true
+  error.value = null
+
+  try {
+    // 1) Fetch all submissions
+    const resSubs = await userApi.get('/submissions')
+    const allSubmissions = extractArray(resSubs.data)
+
+    // 2) Fetch my evaluations (assigned/created evaluations for this user)
+    const resEvals = await userApi.get('/evaluations/my-assigned')
+    const evaluations = extractArray(resEvals.data)
+
+    // 3) Build a set of completed evaluation submission IDs
+    const completedIds = new Set(
+      evaluations
+        .filter((e) => e?.is_completed)
+        .map((e) => e?.submission_id)
+        .filter((id) => id != null)
+    )
+
+    // 4) Show only submissions NOT yet evaluated by current user
+    submissions.value = allSubmissions.filter((s) => !completedIds.has(s?.id))
+  } catch (e) {
+    error.value =
+      e?.response?.data?.message ||
+      e?.message ||
+      'Failed to load submissions'
+  } finally {
+    loading.value = false
   }
-]);
+}
 
-const handleEvaluate = (proposal) => {
-  emit('evaluate', proposal);
-};
+const handleEvaluate = (submission) => {
+  emit('evaluate', submission)
+}
+
+onMounted(fetchData)
+
+// ✅ expose refresh to parent (Evaluation.vue) so after submit it can refresh and hide evaluated submission
+defineExpose({ fetchData })
 </script>
 
 <template>
   <div class="container">
     <header class="section-header">
-      <h1>Assigned Proposals</h1>
+      <h1>Submissions</h1>
     </header>
 
+    <div v-if="loading">Loading submissions...</div>
+
+    <div v-else-if="error" style="color:#DC2626; margin: 10px 0; white-space: pre-line;">
+      {{ error }}
+    </div>
+
+    <div v-else-if="submissions.length === 0">
+      🎉 You have evaluated all available submissions.
+    </div>
+
     <div
-      v-for="(proposal, index) in assignedProposals"
-      :key="index"
+      v-else
+      v-for="submission in submissions"
+      :key="submission.id"
       class="proposal-card"
     >
       <div class="proposal-content">
         <div class="info-row">
-          <span class="label">Title:</span> {{ proposal.title }}
+          <span class="label">Title:</span>
+          {{ submission.title ?? submission.paper_title ?? '—' }}
         </div>
+
         <div class="info-row">
-          <span class="label">Authors:</span> {{ proposal.authors }}
+          <span class="label">Authors:</span>
+          {{ submission.authors ?? submission.user?.name ?? '—' }}
         </div>
+
         <div class="info-row">
-          <span class="label">Event:</span> {{ proposal.event }}
+          <span class="label">Event:</span>
+          {{ submission.event?.title ?? submission.event?.name ?? '—' }}
         </div>
+
         <div class="info-row">
-          <span class="label">Evaluation Deadline:</span> {{ proposal.deadline }}
+          <span class="label">Evaluation Deadline:</span>
+          {{ submission.deadline ?? submission.event?.submission_deadline ?? '—' }}
         </div>
       </div>
 
       <div class="action-row">
-        <button @click="handleEvaluate(proposal)" class="btn-evaluate">
+        <button @click="handleEvaluate(submission)" class="btn-evaluate">
           Evaluate
         </button>
       </div>
@@ -80,14 +127,14 @@ const handleEvaluate = (proposal) => {
   min-height: 100vh;
 
   max-width: 1300px;
-  margin: 20px auto; 
+  margin: 20px auto;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Header */
 .section-header h1 {
-    font-family: 'poppins', sans-serif;
+  font-family: 'poppins', sans-serif;
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 20px;

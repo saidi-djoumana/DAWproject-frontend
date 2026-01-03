@@ -1,16 +1,18 @@
+<!-- src/components/evaluation/EvaluationForm.vue -->
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue'
+import userApi from '@/api/userAxios'
 
-/* receive proposal from parent */
+/* receive proposal/submission from parent */
 const props = defineProps({
   proposal: {
     type: Object,
     required: true
   }
-});
+})
 
 /* allow parent to close the form */
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'submitted'])
 
 /* State for the form */
 const evaluation = ref({
@@ -19,25 +21,134 @@ const evaluation = ref({
   originality: 5,
   comments: '',
   recommendation: null
-});
+})
 
-const proposalDetails = {
-  title: props.proposal.title,
-  authors: props.proposal.authors,
-  keywords: props.proposal.keywords ?? '—',
-  presentationType: props.proposal.presentationType ?? '—'
-};
+/* UI state */
+const isSubmitting = ref(false)
+const submitError = ref(null)
+const isDownloading = ref(false)
+
+/* Abstract toggle */
+const isAbstractExpanded = ref(false)
+
+/* Reactive proposal details (updates when props.proposal changes) */
+const proposalDetails = computed(() => ({
+  title: props.proposal?.title ?? props.proposal?.paper_title ?? '—',
+  authors: Array.isArray(props.proposal?.authors)
+    ? props.proposal.authors.join(', ')
+    : (props.proposal?.authors ?? props.proposal?.user?.name ?? '—'),
+  keywords: Array.isArray(props.proposal?.keywords)
+    ? props.proposal.keywords.join(', ')
+    : (props.proposal?.keywords ?? '—'),
+  presentationType:
+    props.proposal?.presentationType ??
+    props.proposal?.presentation_type ??
+    props.proposal?.type ??
+    '—'
+}))
+
+/* Use author's abstract (stored in submissions.abstract) */
+const abstractText = computed(() => props.proposal?.abstract ?? '—')
+
+const shortAbstract = computed(() => {
+  const text = abstractText.value || ''
+  if (text === '—') return '—'
+  const max = 220
+  return text.length > max ? text.slice(0, max).trimEnd() + '...' : text
+})
+
+const hasPdf = computed(() => !!props.proposal?.pdf_file)
 
 const setRecommendation = (type) => {
-  evaluation.value.recommendation = type;
-};
+  evaluation.value.recommendation = type
+}
 
-const submitEvaluation = () => {
-  console.log('Proposal:', props.proposal);
-  console.log('Evaluation:', evaluation.value);
+function toggleAbstract() {
+  isAbstractExpanded.value = !isAbstractExpanded.value
+}
 
-  emit('close');
-};
+async function downloadPdf() {
+  submitError.value = null
+
+  const submissionId = props.proposal?.id
+  if (!submissionId) {
+    submitError.value = 'Missing submission id.'
+    return
+  }
+
+  if (!hasPdf.value) {
+    submitError.value = 'No PDF file uploaded for this submission.'
+    return
+  }
+
+  isDownloading.value = true
+  try {
+    const res = await userApi.get(`/submissions/${submissionId}/pdf`, {
+      responseType: 'blob'
+    })
+
+    const blob = new Blob([res.data], { type: 'application/pdf' })
+    const url = window.URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `submission-${submissionId}.pdf`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+
+    window.URL.revokeObjectURL(url)
+  } catch (e) {
+    const data = e?.response?.data
+    submitError.value =
+      data?.message || e?.message || 'Failed to download PDF.'
+  } finally {
+    isDownloading.value = false
+  }
+}
+
+async function submitEvaluation() {
+  submitError.value = null
+
+  if (!evaluation.value.recommendation) {
+    submitError.value =
+      'Please choose a recommendation (Accept / Reject / Requires Revision).'
+    return
+  }
+
+  const submissionId = props.proposal?.id
+  if (!submissionId) {
+    submitError.value = 'Missing submission id.'
+    return
+  }
+
+  isSubmitting.value = true
+  try {
+    await userApi.post(`/submissions/${submissionId}/evaluate`, {
+      relevance_score: evaluation.value.relevance,
+      scientific_quality_score: evaluation.value.scientificQuality,
+      originality_score: evaluation.value.originality,
+      comments: evaluation.value.comments,
+      recommendation: evaluation.value.recommendation // accept | reject | revision
+    })
+
+    emit('submitted')
+    emit('close')
+  } catch (e) {
+    const data = e?.response?.data
+
+    if (data?.errors) {
+      submitError.value = Object.entries(data.errors)
+        .map(([field, msgs]) => `${field}: ${msgs.join(', ')}`)
+        .join('\n')
+    } else {
+      submitError.value =
+        data?.message || e?.message || 'Failed to submit evaluation.'
+    }
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
 
 <template>
@@ -54,15 +165,31 @@ const submitEvaluation = () => {
       <div class="details-right">
         <div class="pdf-upload">
           <span>Uploaded PDF:</span>
-          <button class="btn-secondary">Download Summary (PDF)</button>
+          <button
+            class="btn-secondary"
+            type="button"
+            @click="downloadPdf"
+            :disabled="isDownloading || !hasPdf"
+            :title="!hasPdf ? 'No PDF uploaded' : ''"
+          >
+            {{ isDownloading ? 'Downloading...' : 'Download Summary (PDF)' }}
+          </button>
         </div>
 
         <div class="abstract-box">
           <span class="label">Abstract (Resume):</span>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
+            {{ isAbstractExpanded ? abstractText : shortAbstract }}
           </p>
-          <button class="btn-read-more">Read More ▾</button>
+
+          <button
+            v-if="abstractText && abstractText !== '—' && abstractText.length > 220"
+            class="btn-read-more"
+            type="button"
+            @click="toggleAbstract"
+          >
+            {{ isAbstractExpanded ? 'Show Less ▴' : 'Read More ▾' }}
+          </button>
         </div>
       </div>
     </div>
@@ -101,12 +228,6 @@ const submitEvaluation = () => {
         v-model="evaluation.comments"
         placeholder="Explain the strengths, weaknesses, clarity, methodology, and relevance of this work..."
       ></textarea>
-
-      <div class="align-right">
-        <button class="btn-submit-small" @click="submitEvaluation">
-          Submit
-        </button>
-      </div>
     </div>
 
     <div class="recommendation-section">
@@ -123,15 +244,24 @@ const submitEvaluation = () => {
           <span>Reject</span>
         </div>
 
-        <div class="rec-item" @click="setRecommendation('correction')">
-          <div class="circle" :class="evaluation.recommendation === 'correction' ? 'bg-yellow' : 'bg-gray'"></div>
-          <span>Requires Correction</span>
+        <div class="rec-item" @click="setRecommendation('revision')">
+          <div class="circle" :class="evaluation.recommendation === 'revision' ? 'bg-yellow' : 'bg-gray'"></div>
+          <span>Requires Revision</span>
         </div>
       </div>
     </div>
 
-    <button class="btn-primary-large" @click="submitEvaluation">
-      Submit Evaluation
+    <div v-if="submitError" class="error-text" style="white-space: pre-line;">
+      {{ submitError }}
+    </div>
+
+    <button
+      class="btn-primary-large"
+      @click="submitEvaluation"
+      :disabled="isSubmitting"
+      type="button"
+    >
+      {{ isSubmitting ? 'Submitting...' : 'Submit Evaluation' }}
     </button>
   </div>
 </template>
@@ -249,12 +379,6 @@ textarea {
   resize: none;
 }
 
-.align-right {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
 .rec-options {
   display: flex;
   flex-direction: column;
@@ -291,12 +415,9 @@ textarea {
   cursor: pointer;
 }
 
-.btn-submit-small {
-  background-color: #CCEBEB;
-  border: 1px solid #004E38;
-  padding: 6px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+.btn-secondary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .btn-primary-large {
@@ -307,5 +428,16 @@ textarea {
   font-weight: 600;
   margin-top: 40px;
   cursor: pointer;
+}
+
+.btn-primary-large:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.error-text {
+  margin-top: 12px;
+  color: #DC2626;
+  font-size: 13px;
 }
 </style>
