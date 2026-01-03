@@ -146,4 +146,55 @@ const approveOrganizer = async () => {
 .btn-done:hover {
   background-color: #C1D9D9;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .activation-card {
+    width: 90%;
+    max-width: 480px;
+    padding: 30px;
+  }
+
+  .card-header h1 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+
+  .message-text, .value {
+    font-size: 14px;
+  }
+
+  .btn-done {
+    padding: 8px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .activation-card {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .card-header h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+  }
+
+  .message-text, .value {
+    font-size: 13px;
+  }
+
+  .btn-done {
+    padding: 6px 20px;
+    font-size: 14px;
+  }
+}
 </style>

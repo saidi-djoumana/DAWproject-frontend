@@ -159,4 +159,71 @@ const handleCreate = async () => {
 .btn-submit:hover {
   background-color: #b9e0e0;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 15px;
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-card {
+    padding: 30px;
+  }
+
+  .organizer-form {
+    gap: 16px;
+  }
+
+  .input-group input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .btn-submit {
+    padding: 12px;
+    font-size: 16px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .section-header h1 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .form-card {
+    padding: 20px;
+  }
+
+  .organizer-form {
+    gap: 12px;
+  }
+
+  .input-group label {
+    font-size: 13px;
+  }
+
+  .input-group input {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .btn-submit {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
 </style>

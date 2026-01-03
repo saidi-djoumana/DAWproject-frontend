@@ -216,4 +216,84 @@ label { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 8px; }
 .chart-placeholder span { font-size: 12px; color: #6B7280; font-weight: 500; }
 @media (max-width: 1024px) { .main-grid, .bottom-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .main-grid, .bottom-grid { grid-template-columns: 1fr; } }
+
+/* Additional responsive styles */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px;
+    margin: 15px;
+    max-width: 100%;
+  }
+
+  .dashboard-header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .main-grid, .bottom-grid {
+    gap: 15px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .stat-card {
+    min-height: 180px;
+  }
+
+  .chart-card {
+    min-height: 220px;
+  }
+
+  .primary-val {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+  .mini-card {
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .main-grid, .bottom-grid {
+    gap: 10px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .stat-card {
+    min-height: 160px;
+  }
+
+  .chart-card {
+    min-height: 200px;
+  }
+
+  .primary-val {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .mini-card {
+    padding: 10px 16px;
+  }
+
+  label {
+    font-size: 13px;
+  }
+}
 </style>

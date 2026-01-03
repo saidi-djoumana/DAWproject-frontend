@@ -22,3 +22,19 @@ const props = defineProps({
     }"
   />
 </template>
+
+<style scoped>
+/* Responsive styles for the chart container */
+@media (max-width: 768px) {
+  :deep(.chartjs-render-monitor) {
+    max-width: 100%;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  :deep(.chartjs-render-monitor) {
+    font-size: 12px;
+  }
+}
+</style>

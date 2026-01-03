@@ -111,4 +111,50 @@ onMounted(() => {
 .evaluation-table tbody tr:hover {
   background-color: #F9FAFB;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 20px;
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+  .evaluation-table {
+    min-width: 600px; /* Ensure table doesn't shrink too much */
+  }
+
+  .evaluation-table th,
+  .evaluation-table td {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .section-header h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .evaluation-table th,
+  .evaluation-table td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+}
 </style>

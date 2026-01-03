@@ -300,4 +300,65 @@ onMounted(() => {
   align-items: center;
   z-index: 1000;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 20px;
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+  .organizer-table {
+    min-width: 800px; /* Ensure table doesn't shrink too much */
+  }
+
+  .organizer-table th,
+  .organizer-table td {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .actions-cell {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .btn-approve, .btn-reject {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .section-header h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .organizer-table th,
+  .organizer-table td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .btn-approve, .btn-reject {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
 </style>

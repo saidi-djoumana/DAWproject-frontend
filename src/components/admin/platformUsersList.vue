@@ -223,4 +223,64 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0.4);
   display: flex; justify-content: center; align-items: center; z-index: 1000;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 20px;
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+  .user-table {
+    min-width: 900px; /* Ensure table doesn't shrink too much */
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .actions-cell {
+    gap: 4px;
+  }
+
+  .btn-toggle, .btn-delete {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .section-header h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .btn-toggle, .btn-delete {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+}
 </style>

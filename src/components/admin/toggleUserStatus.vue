@@ -68,4 +68,55 @@ const updateStatus = () => {
   background-color: #D1E9E9; color: #064E3B; border: 1px solid #064E3B;
   padding: 10px 30px; border-radius: 6px; font-weight: 600; cursor: pointer;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .status-modal-card {
+    width: 90%;
+    max-width: 450px;
+    padding: 30px;
+  }
+
+  .highlight-title {
+    font-size: 24px;
+    padding: 6px 16px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .info-group p {
+    font-size: 14px;
+  }
+
+  .btn-update {
+    padding: 8px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-modal-card {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .highlight-title {
+    font-size: 20px;
+    padding: 4px 12px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+
+  .info-group p {
+    font-size: 13px;
+  }
+
+  .btn-update {
+    padding: 6px 18px;
+    font-size: 14px;
+  }
+}
 </style>
