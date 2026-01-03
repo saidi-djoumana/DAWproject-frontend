@@ -1,6 +1,5 @@
 <script setup>
 import { ref, defineProps, onMounted } from 'vue'
-import api from '@/api/userAxios'
 
 const props = defineProps({
   eventId: {
@@ -28,38 +27,83 @@ const workshop = ref({
   animatorId: ''
 })
 
-/* ------------------ EVENT DATA ------------------ */
+/* ------------------ FAKE EVENT DATA ------------------ */
 const sessions = ref([])
 const workshops = ref([])
 const approvedSubmissions = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-/* ------------------ API CALLS ------------------ */
+/* ------------------ FAKE FETCH ------------------ */
 const fetchEventDetails = async () => {
   loading.value = true
   error.value = null
+
   try {
-    const [sessionsRes, workshopsRes, submissionsRes] = await Promise.all([
-      api.get(`/events/${props.eventId}/sessions`),
-      api.get(`/events/${props.eventId}/workshops`),
-      api.get('/submissions')
-    ])
+    // simulate async delay (optional)
+    await new Promise((r) => setTimeout(r, 300))
 
-    sessions.value = sessionsRes.data.data || []
-    workshops.value = workshopsRes.data.data || []
+    // Fake sessions
+    sessions.value = [
+      {
+        id: 1,
+        title: 'Opening Session',
+        start_time: '2026-06-15 09:00:00',
+        end_time: '2026-06-15 10:30:00',
+        room: 'Room A',
+        session_chair: 'Dr. Amina Benali'
+      },
+      {
+        id: 2,
+        title: 'AI in Healthcare',
+        start_time: '2026-06-15 11:00:00',
+        end_time: '2026-06-15 12:30:00',
+        room: 'Room B',
+        session_chair: 'Prof. Hichem Bouzid'
+      }
+    ]
 
-    // Only accepted submissions
-    approvedSubmissions.value = submissionsRes.data.data
-      .filter(s => s.status === 'accepted')
-      .map(s => ({
-        id: s.id,
-        title: s.title,
-        author: s.user?.name || 'Unknown',
+    // Fake workshops
+    workshops.value = [
+      {
+        id: 1,
+        title: 'Research Methodology Workshop',
+        start_time: '2026-06-16 14:00:00',
+        end_time: '2026-06-16 16:00:00',
+        description: 'Hands-on workshop on study design and methodology.',
+        room: 'Lab 1',
+        max_participants: 25,
+        animator_id: 10
+      }
+    ]
+
+    // Fake accepted submissions
+    approvedSubmissions.value = [
+      {
+        id: 101,
+        title: 'Predictive Models for Disease Outbreaks',
+        author: 'Nour El Yakine',
         sessionId: '',
         startingTime: '',
         endingTime: ''
-      }))
+      },
+      {
+        id: 102,
+        title: 'Wearable Sensors for Remote Monitoring',
+        author: 'Imene B.',
+        sessionId: '',
+        startingTime: '',
+        endingTime: ''
+      },
+      {
+        id: 103,
+        title: 'Clinical NLP: Extracting Insights from Reports',
+        author: 'Khaled M.',
+        sessionId: '',
+        startingTime: '',
+        endingTime: ''
+      }
+    ]
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load event details'
@@ -68,67 +112,63 @@ const fetchEventDetails = async () => {
   }
 }
 
-/* ------------------ CREATE ACTIONS ------------------ */
+/* ------------------ CREATE ACTIONS (LOCAL ONLY) ------------------ */
 const addSession = async () => {
-  try {
-    await api.post(`/events/${props.eventId}/sessions`, {
-      title: session.value.title,
-      start_time: session.value.startingTime,
-      end_time: session.value.endingTime,
-      room: session.value.room,
-      session_chair: session.value.sessionChair
-    })
-    session.value = { title: '', startingTime: '', endingTime: '', room: '', sessionChair: '' }
-    await fetchEventDetails() // Refresh sessions
-    alert('Session added successfully')
-  } catch (err) {
-    console.error(err)
-    alert('Failed to add session')
+  // basic UI validation (optional)
+  if (!session.value.title) return alert('Please enter a session title')
+
+  const newSession = {
+    id: Date.now(),
+    title: session.value.title,
+    start_time: session.value.startingTime,
+    end_time: session.value.endingTime,
+    room: session.value.room,
+    session_chair: session.value.sessionChair
   }
+
+  sessions.value.unshift(newSession)
+
+  session.value = { title: '', startingTime: '', endingTime: '', room: '', sessionChair: '' }
+  alert('Session added successfully (fake/local)')
 }
 
 const addWorkshop = async () => {
-  try {
-    await api.post(`/events/${props.eventId}/workshops`, {
-      title: workshop.value.title,
-      start_time: workshop.value.startingTime,
-      end_time: workshop.value.endingTime,
-      description: workshop.value.description,
-      room: workshop.value.room,
-      max_participants: workshop.value.maxParticipants,
-      animator_id: workshop.value.animatorId
-    })
-    workshop.value = { title: '', startingTime: '', endingTime: '', description: '', room: '', maxParticipants: '', animatorId: '' }
-    await fetchEventDetails() // Refresh workshops
-    alert('Workshop added successfully')
-  } catch (err) {
-    console.error(err)
-    alert('Failed to add workshop')
+  if (!workshop.value.title) return alert('Please enter a workshop title')
+
+  const newWorkshop = {
+    id: Date.now(),
+    title: workshop.value.title,
+    start_time: workshop.value.startingTime,
+    end_time: workshop.value.endingTime,
+    description: workshop.value.description,
+    room: workshop.value.room,
+    max_participants: workshop.value.maxParticipants,
+    animator_id: workshop.value.animatorId
   }
+
+  workshops.value.unshift(newWorkshop)
+
+  workshop.value = { title: '', startingTime: '', endingTime: '', description: '', room: '', maxParticipants: '', animatorId: '' }
+  alert('Workshop added successfully (fake/local)')
 }
 
 const addPresentation = async (index) => {
   const submission = approvedSubmissions.value[index]
   if (!submission.sessionId) return alert('Please provide a session ID')
 
-  try {
-    await api.post(
-      `/events/${props.eventId}/sessions/${submission.sessionId}/assign-submission`,
-      {
-        submission_id: submission.id,
-        start_time: submission.startingTime,
-        end_time: submission.endingTime
-      }
-    )
-    submission.sessionId = ''
-    submission.startingTime = ''
-    submission.endingTime = ''
-    await fetchEventDetails() // Refresh sessions to see presentation
-    alert('Presentation assigned successfully')
-  } catch (err) {
-    console.error(err)
-    alert('Failed to assign presentation')
-  }
+  // We’ll just show a fake success and clear the fields,
+  // and optionally remove it from the list to simulate “assigned”
+  alert(
+    `Presentation assigned (fake/local)\n\nSubmission: ${submission.title}\nSession ID: ${submission.sessionId}\nStart: ${submission.startingTime}\nEnd: ${submission.endingTime}`
+  )
+
+  // Option 1: clear only
+  submission.sessionId = ''
+  submission.startingTime = ''
+  submission.endingTime = ''
+
+  // Option 2 (better UI): remove from list after assigning
+  // approvedSubmissions.value.splice(index, 1)
 }
 
 /* ------------------ LIFECYCLE ------------------ */
@@ -136,6 +176,7 @@ onMounted(() => {
   fetchEventDetails()
 })
 </script>
+
 
 <template>
   <div class="container">

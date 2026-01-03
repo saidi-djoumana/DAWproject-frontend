@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, defineProps } from 'vue'
-import api from '@/api/userAxios'
 
 const props = defineProps({
   eventId: {
@@ -13,14 +12,50 @@ const workshops = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-/* ------------------ FETCH WORKSHOPS ------------------ */
+/* ------------------ FAKE FETCH WORKSHOPS ------------------ */
 const fetchWorkshops = async () => {
   loading.value = true
   error.value = null
 
   try {
-    const response = await api.get(`/events/${props.eventId}/workshops`)
-    workshops.value = response.data.data
+    // simulate delay (optional)
+    await new Promise((r) => setTimeout(r, 300))
+
+    workshops.value = [
+      {
+        id: 1,
+        title: 'Research Methodology Workshop',
+        animator: 'Dr. Nadia Saidi',
+        room: 'Lab 1',
+        date: '2026-06-16',
+        start_time: '14:00',
+        end_time: '16:00',
+        current_participants: 12,
+        max_participants: 25
+      },
+      {
+        id: 2,
+        title: 'Writing & Publishing Scientific Papers',
+        animator: 'Prof. Hichem Bouzid',
+        room: 'Room C',
+        date: '2026-06-16',
+        start_time: '16:30',
+        end_time: '18:00',
+        current_participants: 20,
+        max_participants: 20
+      },
+      {
+        id: 3,
+        title: 'Practical Data Visualization',
+        animator: 'Dr. Amina Benali',
+        room: 'Computer Lab',
+        date: '2026-06-17',
+        start_time: '09:00',
+        end_time: '11:00',
+        current_participants: 8,
+        max_participants: 18
+      }
+    ]
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load workshops'
@@ -29,15 +64,25 @@ const fetchWorkshops = async () => {
   }
 }
 
-/* ------------------ HANDLERS ------------------ */
-const handleEdit = (workshop) => console.log('Editing Workshop:', workshop.title)
-const handleDelete = (workshop) => console.log('Deleting Workshop:', workshop.title)
+/* ------------------ HANDLERS (LOCAL ONLY) ------------------ */
+const handleEdit = (workshop) => {
+  console.log('Editing Workshop:', workshop.title)
+  alert(`Fake edit: "${workshop.title}"`)
+}
+
+const handleDelete = (workshop) => {
+  console.log('Deleting Workshop:', workshop.title)
+  // remove locally to simulate delete
+  workshops.value = workshops.value.filter((w) => w !== workshop)
+  alert(`Fake delete: "${workshop.title}"`)
+}
 
 /* ------------------ LIFECYCLE ------------------ */
 onMounted(() => {
   fetchWorkshops()
 })
 </script>
+
 
 <template>
   <div class="container">

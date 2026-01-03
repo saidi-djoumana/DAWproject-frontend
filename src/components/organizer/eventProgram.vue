@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, defineProps } from 'vue'
-import api from '@/api/userAxios'
 
 const props = defineProps({
   eventId: {
@@ -13,15 +12,75 @@ const eventProgram = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-/* ------------------ FETCH PROGRAM ------------------ */
-
+/* ------------------ FAKE PROGRAM ------------------ */
 const fetchEventProgram = async () => {
   loading.value = true
   error.value = null
 
   try {
-    const response = await api.get(`/events/${props.eventId}/program`)
-    eventProgram.value = response.data.data
+    // simulate delay (optional)
+    await new Promise((r) => setTimeout(r, 300))
+
+    eventProgram.value = [
+      // Period (example)
+      {
+        type: 'period',
+        id: 1,
+        title: 'Registration & Welcome Coffee',
+        start_time: '2026-06-15 08:30:00',
+        end_time: '2026-06-15 09:00:00',
+        room: 'Main Hall'
+      },
+
+      // Session with presentations
+      {
+        type: 'session',
+        id: 1,
+        title: 'Opening Session',
+        start_time: '2026-06-15 09:00:00',
+        end_time: '2026-06-15 10:30:00',
+        room: 'Room A',
+        session_chair: 'Dr. Amina Benali',
+        presentations: [
+          {
+            id: 101,
+            title: 'Predictive Models for Disease Outbreaks',
+            author: 'Nour El Yakine',
+            start_time: '2026-06-15 09:10:00',
+            end_time: '2026-06-15 09:25:00'
+          },
+          {
+            id: 102,
+            title: 'Wearable Sensors for Remote Monitoring',
+            author: 'Imene B.',
+            start_time: '2026-06-15 09:25:00',
+            end_time: '2026-06-15 09:40:00'
+          }
+        ]
+      },
+
+      // Period (example)
+      {
+        type: 'period',
+        id: 2,
+        title: 'Coffee Break',
+        start_time: '2026-06-15 10:30:00',
+        end_time: '2026-06-15 11:00:00',
+        room: ''
+      },
+
+      // Session with no presentations
+      {
+        type: 'session',
+        id: 2,
+        title: 'AI in Healthcare',
+        start_time: '2026-06-15 11:00:00',
+        end_time: '2026-06-15 12:30:00',
+        room: 'Room B',
+        session_chair: 'Prof. Hichem Bouzid',
+        presentations: []
+      }
+    ]
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load event program'
@@ -32,16 +91,23 @@ const fetchEventProgram = async () => {
 
 const handleEdit = (item) => {
   console.log('Editing:', item)
+  alert(`Fake edit: ${item.type} "${item.title}"`)
 }
 
 const handleDelete = (item) => {
   console.log('Deleting:', item)
+
+  // remove locally to simulate deletion
+  eventProgram.value = eventProgram.value.filter((x) => x !== item)
+
+  alert(`Fake delete: ${item.type} "${item.title}"`)
 }
 
 onMounted(() => {
   fetchEventProgram()
 })
 </script>
+
 
 <template>
   <div class="container">
